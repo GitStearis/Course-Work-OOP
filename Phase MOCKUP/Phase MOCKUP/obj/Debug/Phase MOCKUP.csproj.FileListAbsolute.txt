@@ -1,0 +1,12 @@
+D:\Work\C#\Курсовой проект\Phase MOCKUP\Phase MOCKUP\obj\Debug\MainWindow.baml
+D:\Work\C#\Курсовой проект\Phase MOCKUP\Phase MOCKUP\obj\Debug\MainWindow.g.cs
+D:\Work\C#\Курсовой проект\Phase MOCKUP\Phase MOCKUP\obj\Debug\App.g.cs
+D:\Work\C#\Курсовой проект\Phase MOCKUP\Phase MOCKUP\obj\Debug\Phase MOCKUP_MarkupCompile.cache
+D:\Work\C#\Курсовой проект\Phase MOCKUP\Phase MOCKUP\obj\Debug\Phase MOCKUP.g.resources
+D:\Work\C#\Курсовой проект\Phase MOCKUP\Phase MOCKUP\obj\Debug\Phase_MOCKUP.Properties.Resources.resources
+D:\Work\C#\Курсовой проект\Phase MOCKUP\Phase MOCKUP\obj\Debug\Phase MOCKUP.csproj.GenerateResource.Cache
+D:\Work\C#\Курсовой проект\Phase MOCKUP\Phase MOCKUP\bin\Debug\Phase MOCKUP.exe.config
+D:\Work\C#\Курсовой проект\Phase MOCKUP\Phase MOCKUP\bin\Debug\Phase MOCKUP.exe
+D:\Work\C#\Курсовой проект\Phase MOCKUP\Phase MOCKUP\bin\Debug\Phase MOCKUP.pdb
+D:\Work\C#\Курсовой проект\Phase MOCKUP\Phase MOCKUP\obj\Debug\Phase MOCKUP.exe
+D:\Work\C#\Курсовой проект\Phase MOCKUP\Phase MOCKUP\obj\Debug\Phase MOCKUP.pdb

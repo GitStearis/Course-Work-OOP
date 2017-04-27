@@ -72,7 +72,7 @@ namespace Phase_v1._0
 
             foreach(var track in defaultPlaylist.tracklist)
             {
-                CurrentPlaylistBox.Items.Add((defaultPlaylist.tracklist.IndexOf(track) + 1).ToString() + ". " + track);
+                CurrentPlaylistBox.Items.Add(track);
             }
 
             Player.Load(defaultPlaylist);
@@ -122,11 +122,19 @@ namespace Phase_v1._0
             isPlaying = true;
             TrackProgressSlider.Value = 0;
 
+            Console.WriteLine(CurrentPlaylistBox.Items.IndexOf(Player.CurrentTrack));
+            CurrentPlaylistBox.SelectedIndex = CurrentPlaylistBox.Items.IndexOf(Player.CurrentTrack);
+            CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
+
             StartDraw();
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine(CurrentPlaylistBox.Items.IndexOf(Player.CurrentTrack));
+            CurrentPlaylistBox.SelectedIndex = CurrentPlaylistBox.Items.IndexOf(Player.CurrentTrack);
+            CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
+
             if (isPlaying == false)
             {
                 Player.Play();
@@ -152,6 +160,9 @@ namespace Phase_v1._0
             PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
             isPlaying = true;
             TrackProgressSlider.Value = 0;
+
+            CurrentPlaylistBox.SelectedIndex = CurrentPlaylistBox.Items.IndexOf(Player.CurrentTrack);
+            CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
 
             StartDraw();
         }
@@ -233,7 +244,7 @@ namespace Phase_v1._0
                 //Adding to default playlist
                 defaultPlaylist.tracklist.Add(temp);
                 //Drawing on the playlist box
-                CurrentPlaylistBox.Items.Add((defaultPlaylist.tracklist.IndexOf(temp) + 1).ToString() + ". " + temp);
+                CurrentPlaylistBox.Items.Add(temp);
                 //Loading playlist to player
             }
             Player.Load(defaultPlaylist);
@@ -258,7 +269,7 @@ namespace Phase_v1._0
 
             foreach (var track in defaultPlaylist.tracklist)
             {
-                CurrentPlaylistBox.Items.Add((defaultPlaylist.tracklist.IndexOf(track) + 1).ToString() + ". " + track);
+                CurrentPlaylistBox.Items.Add(track);
             }
         }
         private void AddTrackButton_Click(object sender, RoutedEventArgs e)

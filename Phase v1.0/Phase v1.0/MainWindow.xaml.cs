@@ -13,10 +13,12 @@ namespace Phase_v1._0
 {
     public partial class MainWindow : Window
     {
+        DispatcherTimer tick = new DispatcherTimer();
         private DispatcherTimer timer;
         private Playlist defaultPlaylist = new Playlist();
         private Playlist customPlaylist = new Playlist();
         private bool isPlaying;
+        private bool isDragging;
 
         private void Drawer(object sender, EventArgs e)
         {
@@ -80,12 +82,17 @@ namespace Phase_v1._0
             isPlaying = false;
 
             CurrentPlaylistBox.MouseDoubleClick += Playlist_TrackDoubleClick;
-            TrackProgressSlider.ValueChanged += TrackProgressSlider_ValueChanged;
+            //TrackProgressSlider.ValueChanged += TrackProgressSlider_ValueChanged;
+
+            tick.Interval = TimeSpan.FromMilliseconds(50);
+            tick.Tick += new EventHandler(ChangeSliderPosition);
+            
+
             //TODO: Slider animation
             //TODO: Slider style
         }
 
-            private void MouseClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void MouseClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Point currentPoint = new Point();
 
@@ -142,6 +149,8 @@ namespace Phase_v1._0
                 isPlaying = true;
                 TrackProgressSlider.Value = 0;
 
+                tick.Start();
+
                 StartDraw();
             }
             else
@@ -149,6 +158,8 @@ namespace Phase_v1._0
                 Player.Pause();
                 PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/play.png", UriKind.RelativeOrAbsolute));
                 isPlaying = false;
+
+                tick.Stop();
 
                 StopDraw();
             }
@@ -208,11 +219,11 @@ namespace Phase_v1._0
 
         }
 
-        private void TrackProgressSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            Player.currentTime = Player.totalTime * TrackProgressSlider.Value / 100;
-            Player.Play();
-        }
+        //private void TrackProgressSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        //{
+        //    Player.currentTime = Player.totalTime * TrackProgressSlider.Value / 100;
+        //    Player.Play();
+        //}
 
         private void Playlist_TrackDoubleClick(Object sender, MouseButtonEventArgs e)
         {
@@ -310,6 +321,30 @@ namespace Phase_v1._0
         private void SaveCurrentPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void ChangeSliderPosition(object sender, EventArgs e)
+        {
+            if (!isDragging)
+            {
+                if (Player.player.NaturalDuration.HasTimeSpan == true)
+                {
+                    TrackProgressSlider.Value = Player.player.Position.TotalMilliseconds * 1000 / Player.player.NaturalDuration.TimeSpan.TotalMilliseconds;
+                }
+            }
+        }
+
+        private void TrackProgressSlider_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+        {
+            isDragging = true;
+        }
+
+        private void TrackProgressSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            isDragging = false;
+
+            Player.currentTime = Player.totalTime * TrackProgressSlider.Value / 1000;
+            Player.Play();
         }
     }
 }

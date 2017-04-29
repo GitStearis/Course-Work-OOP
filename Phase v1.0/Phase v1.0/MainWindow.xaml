@@ -211,8 +211,10 @@
                             <Setter Property="Width" Value="160"/>
                         </Style>
                     </ContextMenu.Style>
+                    <MenuItem Header="Open track"/>
                     <MenuItem Header="Open playlist"/>
-                    <MenuItem Header="Save custom playlist"/>
+                    <MenuItem Header="Save playlist"/>
+                    <MenuItem Header="Save playlist as"/>
                     <Separator />
                     <MenuItem Header="About"/>
                     <MenuItem Header="Exit"/>
@@ -238,25 +240,44 @@
         </Button>
 
         <Slider Style="{StaticResource Horizontal_Slider}" x:Name="TrackProgressSlider" Width="480" Height="20"
-                Maximum="100" Minimum="1" Value="0" TickFrequency="10"
+                Maximum="1000" Minimum="1" Value="0" TickFrequency="10"
                 TickPlacement="None" Margin="10,175,10,533" 
                 HorizontalContentAlignment="Center" HorizontalAlignment="Center" 
-                Background="#99FFFFFF">
+                Background="#99FFFFFF"
+                Thumb.DragStarted="TrackProgressSlider_DragStarted"
+                Thumb.DragCompleted="TrackProgressSlider_DragCompleted">
         </Slider>
 
         <TabControl Height="408" Margin="10,255,10,65" Width="480" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" VerticalAlignment="Center" Background="#99FFFFFF" BorderBrush="{x:Null}" BorderThickness="0" Padding="0">
             <TabItem Style="{StaticResource Tab}" x:Name="DefaultPlaylistTab1" Header="Default" Height="50" Width="237" Background="#99FFFFFF" BorderBrush="{x:Null}" Margin="-4,-10,0,0" IsSelected="True" FontFamily="Century Gothic" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                 <Grid>
-                    <ListBox Drop="DefaultPlaylistDrop" AllowDrop="true" x:Name="CurrentPlaylistBox" HorizontalAlignment="Left" Height="347" VerticalAlignment="Top" Width="480" BorderBrush="{x:Null}" Background="{x:Null}">
+                    <ListBox Drop="DefaultPlaylistDrop" AllowDrop="true" x:Name="CurrentPlaylistBox" HorizontalAlignment="Left" Height="356" VerticalAlignment="Top" Width="480" BorderBrush="{x:Null}" Background="{x:Null}">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Height" Value="40"/>
+                                <Setter Property="Width" Value="Auto"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <Border Name="Border" SnapsToDevicePixels="True" Background="Transparent">
+                                                <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="Border" Property="Background" Value="White"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Border" Property="Background" Value="#CCFFFFFF"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
                                 <Setter Property="Background" Value="White"/>
                                 <Setter Property="Margin" Value="5"/>
                                 <Setter Property="Padding" Value="5"/>
                                 <Style.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Foreground" Value="White"/>
-                                    </Trigger>
+                                     
                                 </Style.Triggers>
 
                             </Style>
@@ -270,26 +291,8 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="SaveCurrentPlaylistButton" Click="SaveCurrentPlaylistButton_Click" Margin="440,668,10,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
-            <Button.Style>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type Button}">
-                                <Border x:Name="Border" Background="{TemplateBinding Background}">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="#E5FFFFFF"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
+        
+        <Button Style="{StaticResource CommonButton}" x:Name="SaveCurrentPlaylistButton" Click="SaveCurrentPlaylistButton_Click" Margin="440,668,10,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\save.png" 
@@ -298,26 +301,7 @@
                 </Border>
             </StackPanel>
         </Button>
-        <Button x:Name="RemoveTrackButton" Click="RemoveTrackButton_Click" Margin="385,668,65,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
-            <Button.Style>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type Button}">
-                                <Border x:Name="Border" Background="{TemplateBinding Background}">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="#E5FFFFFF"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
+        <Button Style="{StaticResource CommonButton}" x:Name="RemoveTrackButton" Click="RemoveTrackButton_Click" Margin="385,668,65,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\minus.png" 
@@ -326,26 +310,7 @@
                 </Border>
             </StackPanel>
         </Button>
-        <Button x:Name="AddTrackButton" Click="AddTrackButton_Click" Margin="330,668,120,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
-            <Button.Style>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type Button}">
-                                <Border x:Name="Border" Background="{TemplateBinding Background}">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="Border" Property="Background" Value="#E5FFFFFF"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
+        <Button Style="{StaticResource CommonButton}" x:Name="AddTrackButton" Click="AddTrackButton_Click" Margin="330,668,120,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\plus.png" 
@@ -354,6 +319,7 @@
                 </Border>
             </StackPanel>
         </Button>
+        <Label x:Name="CurrentTrackLabel" Content="" HorizontalAlignment="Left" Margin="120,132,0,0" VerticalAlignment="Top" FontFamily="Century Gothic" FontSize="14"/>
     </Grid>
 
 </Window>

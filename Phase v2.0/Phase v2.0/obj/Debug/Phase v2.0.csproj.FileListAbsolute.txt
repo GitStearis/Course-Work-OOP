@@ -1,0 +1,13 @@
+D:\Work\C#\Курсовой проект\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.csprojResolveAssemblyReference.cache
+D:\Work\C#\Курсовой проект\Phase v2.0\Phase v2.0\obj\Debug\MainWindow.baml
+D:\Work\C#\Курсовой проект\Phase v2.0\Phase v2.0\obj\Debug\MainWindow.g.cs
+D:\Work\C#\Курсовой проект\Phase v2.0\Phase v2.0\obj\Debug\App.g.cs
+D:\Work\C#\Курсовой проект\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0_MarkupCompile.cache
+D:\Work\C#\Курсовой проект\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.g.resources
+D:\Work\C#\Курсовой проект\Phase v2.0\Phase v2.0\obj\Debug\Phase_v2._0.Properties.Resources.resources
+D:\Work\C#\Курсовой проект\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.csproj.GenerateResource.Cache
+D:\Work\C#\Курсовой проект\Phase v2.0\Phase v2.0\bin\Debug\Phase v2.0.exe.config
+D:\Work\C#\Курсовой проект\Phase v2.0\Phase v2.0\bin\Debug\Phase v2.0.exe
+D:\Work\C#\Курсовой проект\Phase v2.0\Phase v2.0\bin\Debug\Phase v2.0.pdb
+D:\Work\C#\Курсовой проект\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.exe
+D:\Work\C#\Курсовой проект\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.pdb

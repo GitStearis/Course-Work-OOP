@@ -5,8 +5,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls;
-using System.ComponentModel;
-using System.Threading;
 using Microsoft.Win32;
 
 namespace Phase_v1._0
@@ -33,7 +31,6 @@ namespace Phase_v1._0
             CubesForms.Cross(rnd.Next(CubesContainer.maxCubesX), rnd.Next(CubesContainer.maxCubesY), currentColor);
 
             CubesForms.Circle(rnd.Next(CubesContainer.maxCubesX), rnd.Next(CubesContainer.maxCubesY), currentColor);
-
         }
         private void StartDraw()
         {
@@ -82,14 +79,10 @@ namespace Phase_v1._0
             isPlaying = false;
 
             CurrentPlaylistBox.MouseDoubleClick += Playlist_TrackDoubleClick;
-            //TrackProgressSlider.ValueChanged += TrackProgressSlider_ValueChanged;
 
             tick.Interval = TimeSpan.FromMilliseconds(50);
             tick.Tick += new EventHandler(ChangeSliderPosition);
             
-
-            //TODO: Slider animation
-            //TODO: Slider style
         }
 
         private void MouseClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

@@ -18,7 +18,7 @@ namespace Phase_v2._0
         DispatcherTimer sliderTimer = new DispatcherTimer();
 
         private bool isMenuOpened = false;
-        private bool isDragging;
+        private bool isDraggingPosition;
 
         //TRUE - for default
         //FALSE - for custom
@@ -33,6 +33,8 @@ namespace Phase_v2._0
 
             DefaultPlaylistBox.MouseDoubleClick += DefaultPlaylist_TrackDoubleClick;
             CustomPlaylistBox.MouseDoubleClick += CustomPlaylist_TrackDoubleClick;
+
+            Player.SetVolumeLevel(1);
 
             Player.Load(PlaylistManager.GetActivePlaylist());
         }
@@ -112,11 +114,29 @@ namespace Phase_v2._0
 
         private void LoopButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (Player.isLooped == false)
+            {
+                Player.LoopOn();
+                LoopButton.Background = Brushes.White;
+            }
+            else
+            {
+                Player.LoopOff();
+                LoopButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
+            }
         }
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (Player.isShuffled == false)
+            {
+                Player.ShuffleOn();
+                ShuffleButton.Background = Brushes.White;
+            }
+            else
+            {
+                Player.ShuffleOff();
+                ShuffleButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
+            }
         }
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)
@@ -154,6 +174,10 @@ namespace Phase_v2._0
             }
 
             Player.Load(PlaylistManager.GetActivePlaylist());
+
+            PlaylistManager.activePlaylist = false;
+            selectedTab = false;
+            CustomPlaylistTab.Focus();
         }
 
         private void PlaylistButton_Click(object sender, RoutedEventArgs e)
@@ -301,7 +325,7 @@ namespace Phase_v2._0
 
         private void ChangeSliderPosition(object sender, EventArgs e)
         {
-            if (!isDragging)
+            if (!isDraggingPosition)
             {
                 if (Player.player.NaturalDuration.HasTimeSpan == true)
                 {
@@ -312,12 +336,12 @@ namespace Phase_v2._0
 
         private void TrackProgressSlider_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
-            isDragging = true;
+            isDraggingPosition = true;
         }
 
         private void TrackProgressSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            isDragging = false;
+            isDraggingPosition = false;
 
             if (Player.CurrentPlaylist.Count() > 0)
             {
@@ -326,5 +350,25 @@ namespace Phase_v2._0
             }
         }
 
+        private void MuteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Player.isMuted == false)
+            {
+                Player.MuteOn();
+                MuteButton.Background = Brushes.White;
+            }
+            else
+            {
+                Player.MuteOff();
+                MuteButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
+            }
+        }
+
+        private void VolumeLevelSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            Player.MuteOff();
+            MuteButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
+            Player.SetVolumeLevel(VolumeLevelSlider.Value / 100);
+        }
     }
 }

@@ -26,6 +26,64 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="SliderRepeatButton1" TargetType="{x:Type RepeatButton}">
+            <Setter Property="Focusable" Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border SnapsToDevicePixels="True" Background="White" Height="10"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SliderRepeatButton" TargetType="{x:Type RepeatButton}">
+            <Setter Property="Focusable" Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border SnapsToDevicePixels="True" Background="White" Opacity="0.6" Height="10"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SliderThumb" TargetType="{x:Type Thumb}">
+            <Setter Property="Focusable" Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Rectangle Height="20" Width="20" Fill="White"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="Slider"  TargetType="{x:Type Slider}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Track Grid.Row="1" x:Name="PART_Track"   >
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Style="{StaticResource SliderRepeatButton1}"  Command="Slider.DecreaseLarge" />
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource SliderThumb}"  />
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Style="{StaticResource SliderRepeatButton}" Command="Slider.IncreaseLarge" />
+                    </Track.IncreaseRepeatButton>
+                </Track>
+            </Grid>
+        </ControlTemplate>
+        <Style x:Key="Horizontal_Slider" TargetType="{x:Type Slider}">
+            <Setter Property="Focusable" Value="False"/>
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="Template" Value="{StaticResource Slider}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
     </Window.Resources>
 
@@ -362,8 +420,25 @@
                 </Border>
             </StackPanel>
         </Button>
-        
+
         <Label x:Name="CurrentTrackLabel" Content="" HorizontalAlignment="Left" Margin="120,132,0,0" VerticalAlignment="Top" FontFamily="Century Gothic" FontSize="14"/>
+        
+        <Slider Style="{StaticResource Horizontal_Slider}" x:Name="VolumeLevelSlider" Width="150"
+            Maximum="100" Minimum="1" Value="100" TickFrequency="1"
+            TickPlacement="None" Margin="230,214,120,494" 
+            HorizontalContentAlignment="Center" HorizontalAlignment="Center" 
+            Background="#99FFFFFF"
+            Thumb.DragCompleted="VolumeLevelSlider_DragCompleted"/>
+
+        <Button Style="{StaticResource CommonButton}" x:Name="MuteButton" Click="MuteButton_Click" Margin="175,200,275,478" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+                <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <Image Source="D:\Work\C#\Курсовой проект\Icons\stop.png" 
+                        Width="30" 
+                        Height="30"/>
+                </Border>
+            </StackPanel>
+        </Button>
 
     </Grid>
 

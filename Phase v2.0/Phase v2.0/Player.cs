@@ -25,10 +25,12 @@ namespace Phase_v2._0
 
         public static double pauseTime;
         public static double totalTime = 0;
+        public static double currentVolume;
 
         public static bool isPlaying = false;
         public static bool isLooped = false;
         public static bool isShuffled = false;
+        public static bool isMuted = false;
 
         static public void Load(Playlist value)
         {
@@ -70,20 +72,22 @@ namespace Phase_v2._0
 
         static public void StartPlaying()
         {
+            if (CurrentPlaylist.Count() > 0)
+            {
+                Console.WriteLine(PreviousTrack.TrackTitle);
+                Console.WriteLine(CurrentTrack.TrackTitle);
+                Console.WriteLine(NextTrack.TrackTitle + "\n");
 
-            Console.WriteLine(PreviousTrack.TrackTitle);
-            Console.WriteLine(CurrentTrack.TrackTitle);
-            Console.WriteLine(NextTrack.TrackTitle + "\n");
+                player.MediaOpened += new EventHandler(player_MediaOpened);
 
-            player.MediaOpened += new EventHandler(player_MediaOpened);
+                player.Open(CurrentTrack.TrackUri);
 
-            player.Open(CurrentTrack.TrackUri);
-            
-            player.Position = new TimeSpan(0, 0, 0, 0, (int)pauseTime);
-            player.Play();
+                player.Position = new TimeSpan(0, 0, 0, 0, (int)pauseTime);
+                player.Play();
 
-            //After ending next song will be playing
-            player.MediaEnded += Player_MediaEnded; 
+                //After ending next song will be playing
+                player.MediaEnded += Player_MediaEnded;
+            }
         }
 
         private static void player_MediaOpened(object sender, EventArgs e)
@@ -194,6 +198,28 @@ namespace Phase_v2._0
 
             //Restore old playlist;
             CurrentPlaylist = PrimaryPlaylist;
+        }
+
+        static public void MuteOn()
+        {
+            isMuted = true;
+
+            Console.WriteLine(player.Volume);
+
+            currentVolume = player.Volume;
+            player.Volume = 0;
+        }
+
+        static public void MuteOff()
+        {
+            isMuted = false;
+
+            player.Volume = currentVolume;
+        }
+
+        static public void SetVolumeLevel(double level)
+        {
+            player.Volume = level;
         }
 
     }

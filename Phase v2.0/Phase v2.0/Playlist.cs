@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Phase_v2._0
 {
-    class Playlist
+    public class Playlist
     {
         public List<Track> Tracklist = new List<Track>();
 
@@ -11,6 +11,11 @@ namespace Phase_v2._0
         {
             get { return Tracklist[index]; }
             set => Tracklist[index] = value;
+        }
+
+        public Playlist()
+        {
+
         }
 
         public int Count()
@@ -40,6 +45,12 @@ namespace Phase_v2._0
                 result += Tracklist.IndexOf(track) + track.TrackTitle + "\n";
             }
             return result;
+        }
+
+        //MAKE PLAYLIST SAVING
+        public void Save(string path)
+        {
+
         }
     }
 }

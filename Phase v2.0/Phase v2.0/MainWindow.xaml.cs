@@ -56,41 +56,39 @@ namespace Phase_v2._0
 
                 Player.Previous();
 
-                PlaylistManager.DrawSelection(PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack), selectedTab);
-
                 sliderTimer.Start();
                 TrackProgressSlider.Value = 0;
-
-                CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
-                PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
             }
         }
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Player.CurrentPlaylist.Count() > 0)
+            if (Player.CurrentPlaylist != null)
             {
-                if (Player.isPlaying == false)
+                if (Player.CurrentPlaylist.Count() > 0)
                 {
-                    Player.isPlaying = true;
+                    if (Player.isPlaying == false)
+                    {
+                        Player.isPlaying = true;
 
-                    Player.StartPlaying();
+                        Player.StartPlaying();
 
-                    PlaylistManager.DrawSelection(PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack), selectedTab);
+                        PlaylistManager.DrawSelection(PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack), selectedTab);
 
-                    CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
-                    PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
+                        CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
+                        PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
-                    sliderTimer.Start();
-                }
-                else
-                {
-                    Player.isPlaying = false;
+                        sliderTimer.Start();
+                    }
+                    else
+                    {
+                        Player.isPlaying = false;
 
-                    Player.Pause();
+                        Player.Pause();
 
-                    PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/play.png", UriKind.RelativeOrAbsolute));
+                        PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/play.png", UriKind.RelativeOrAbsolute));
 
-                    sliderTimer.Stop();
+                        sliderTimer.Stop();
+                    }
                 }
             }
         }
@@ -102,13 +100,8 @@ namespace Phase_v2._0
 
                 Player.Next();
 
-                PlaylistManager.DrawSelection(PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack), selectedTab);
-
                 sliderTimer.Start();
                 TrackProgressSlider.Value = 0;
-
-                CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
-                PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
             }
         }
 
@@ -187,55 +180,65 @@ namespace Phase_v2._0
 
         private void DefaultPlaylistTab_GotFocus(object sender, RoutedEventArgs e)
         {
-            PlaylistManager.activePlaylist = true;
             selectedTab = true;
 
-            if (Player.CurrentPlaylist.Count() > 0)
+            if (Player.CurrentPlaylist != null)
             {
-                DefaultPlaylistBox.UnselectAll();
-                int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack);
-                if (index >= 0)
+                if (Player.CurrentPlaylist.Count() > 0)
                 {
-                    PlaylistManager.DrawSelection(index, selectedTab);
+
+                    int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack);
+                    if (index >= 0)
+                    {
+                        PlaylistManager.DrawSelection(index, selectedTab);
+                    }
                 }
             }
         }
 
         private void CustomPlaylistTab_GotFocus(object sender, RoutedEventArgs e)
         {
-            PlaylistManager.activePlaylist = false;
             selectedTab = false;
 
-            if (Player.CurrentPlaylist.Count() > 0)
+            if (Player.CurrentPlaylist != null)
             {
-                DefaultPlaylistBox.UnselectAll();
-                int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack);
-                if (index >= 0)
+                if (Player.CurrentPlaylist.Count() > 0)
                 {
-                    PlaylistManager.DrawSelection(index, selectedTab);
+                    int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack);
+                    if (index >= 0)
+                    {
+                        PlaylistManager.DrawSelection(index, selectedTab);
+                    }
                 }
             }
         }
 
         private void DefaultPlaylist_TrackDoubleClick(Object sender, MouseButtonEventArgs e)
         {
-            Player.Load(PlaylistManager.GetActivePlaylist());
+            selectedTab = true;
+            PlaylistManager.activePlaylist = true;
+
+            Player.Load(PlaylistManager.defaultPlaylist);
 
             DependencyObject obj = (DependencyObject)e.OriginalSource;
 
-            while (obj != null && obj != DefaultPlaylistBox)
+            if (Player.CurrentPlaylist != null)
             {
-                if (obj.GetType() == typeof(ListBoxItem))
+                while (obj != null && obj != DefaultPlaylistBox)
                 {
-                    Player.isPlaying = true;
-                    Player.PlayTrack(Player.CurrentPlaylist[DefaultPlaylistBox.Items.IndexOf(DefaultPlaylistBox.SelectedItem)]);
+                    if (obj.GetType() == typeof(ListBoxItem))
+                    {
+                        Player.isPlaying = true;
 
-                    CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
-                    PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
+                        Player.PlayTrack(Player.CurrentPlaylist[DefaultPlaylistBox.Items.IndexOf(DefaultPlaylistBox.SelectedItem)]);
 
-                    break;
+                        CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
+                        PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
+
+                        break;
+                    }
+                    obj = VisualTreeHelper.GetParent(obj);
                 }
-                obj = VisualTreeHelper.GetParent(obj);
             }
 
             sliderTimer.Start();
@@ -243,23 +246,29 @@ namespace Phase_v2._0
         }
         private void CustomPlaylist_TrackDoubleClick(Object sender, MouseButtonEventArgs e)
         {
-            Player.Load(PlaylistManager.GetActivePlaylist());
+            selectedTab = false;
+            PlaylistManager.activePlaylist = false;
+
+            Player.Load(PlaylistManager.customPlaylist);
 
             DependencyObject obj = (DependencyObject)e.OriginalSource;
 
-            while (obj != null && obj != CustomPlaylistBox)
+            if (Player.CurrentPlaylist != null)
             {
-                if (obj.GetType() == typeof(ListBoxItem))
+                while (obj != null && obj != CustomPlaylistBox)
                 {
-                    Player.isPlaying = true;
-                    Player.PlayTrack(Player.CurrentPlaylist[CustomPlaylistBox.Items.IndexOf(CustomPlaylistBox.SelectedItem)]);
+                    if (obj.GetType() == typeof(ListBoxItem))
+                    {
+                        Player.isPlaying = true;
+                        Player.PlayTrack(Player.CurrentPlaylist[CustomPlaylistBox.Items.IndexOf(CustomPlaylistBox.SelectedItem)]);
 
-                    CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
-                    PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
+                        CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
+                        PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
-                    break;
+                        break;
+                    }
+                    obj = VisualTreeHelper.GetParent(obj);
                 }
-                obj = VisualTreeHelper.GetParent(obj);
             }
 
             sliderTimer.Start();
@@ -315,12 +324,28 @@ namespace Phase_v2._0
 
         private void RemoveTrackButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (selectedTab == true)
+            {
+                if (DefaultPlaylistBox.SelectedItem != null)
+                {
+                    Track selectedTrack = PlaylistManager.defaultPlaylist.Tracklist[DefaultPlaylistBox.Items.IndexOf(DefaultPlaylistBox.SelectedItem)];
+                    PlaylistManager.RemoveTrack(selectedTab, selectedTrack);
+                }
+            }
+            else
+            {
+                if (CustomPlaylistBox.SelectedItem != null)
+                {
+
+                    Track selectedTrack = PlaylistManager.customPlaylist.Tracklist[CustomPlaylistBox.Items.IndexOf(CustomPlaylistBox.SelectedItem)];
+                    PlaylistManager.RemoveTrack(selectedTab, selectedTrack);
+                }
+            }
         }
 
         private void SaveCurrentPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
-
+            PlaylistManager.SaveSelectedPlaylist(selectedTab);
         }
 
         private void ChangeSliderPosition(object sender, EventArgs e)

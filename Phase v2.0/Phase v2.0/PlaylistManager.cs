@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Phase_v2._0
 {
@@ -72,6 +75,74 @@ namespace Phase_v2._0
             }
         }
 
+        static public void RemoveTrack(bool selectedTab, Track track)
+        {
+            Console.WriteLine("Selected tab = " + selectedTab);
+            Console.WriteLine("Active playlist = " + activePlaylist);
+
+            if (selectedTab == activePlaylist)
+            {
+                if (track == Player.CurrentTrack)
+                {
+                    if (Player.isPlaying == true)
+                    {
+                        Console.WriteLine("Playing next!");
+                        Player.Next();
+                    }
+                    else
+                    {
+
+                    }
+                }
+
+                if (Player.CurrentPlaylist.Count() > 1)
+                {
+                    if (activePlaylist == true)
+                    {
+                        defaultPlaylist.Tracklist.Remove(track);
+                        ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Remove(track);
+                    }
+                    else
+                    {
+                        customPlaylist.Tracklist.Remove(track);
+                        ((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.Items.Remove(track);
+                    }
+
+                    Player.CurrentPlaylist.Tracklist.Remove(track);
+                    Player.Reload();
+                }
+                else
+                {
+                    if (activePlaylist == true)
+                    {
+                        defaultPlaylist.Tracklist.Clear();
+                        ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Clear();
+                    }
+                    else
+                    {
+                        customPlaylist.Tracklist.Clear();
+                        ((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.Items.Clear();
+                    }
+
+                    Player.CurrentPlaylist.Tracklist.Clear();
+                    Player.Stop();
+                }
+            }
+            else
+            {
+                if (selectedTab == true)
+                {
+                    defaultPlaylist.Tracklist.Remove(track);
+                    ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Remove(track);
+                }
+                else
+                {
+                    customPlaylist.Tracklist.Remove(track);
+                    ((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.Items.Remove(track);
+                }
+            }
+        }
+
         static public Playlist GetActivePlaylist()
         {
             if (activePlaylist == true)
@@ -98,5 +169,32 @@ namespace Phase_v2._0
                 }
             }
         }
+
+        static public void SaveSelectedPlaylist(bool selectedTab)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.DefaultExt = "pl";
+            saveFileDialog.AddExtension = true;
+            saveFileDialog.Title = "Save selected playlist as";
+            saveFileDialog.InitialDirectory = @"d:\";
+            saveFileDialog.Filter = "Playlist file (*.pl)|*.pl";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                if (saveFileDialog.FileName.EndsWith(".pl"))
+                {
+                    if (selectedTab == true)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+        }
+
+
     }
 }

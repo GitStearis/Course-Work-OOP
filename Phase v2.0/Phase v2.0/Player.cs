@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Phase_v2._0
 {
@@ -41,7 +42,6 @@ namespace Phase_v2._0
 
                 if (value.Count() == 1)
                 {
-
                     CurrentTrack = CurrentPlaylist.First();
                     NextTrack = CurrentPlaylist.First();
                     PreviousTrack = CurrentPlaylist.First();
@@ -62,11 +62,17 @@ namespace Phase_v2._0
                 NextTrack = CurrentPlaylist[1];
                 PreviousTrack = CurrentPlaylist.Last();
             }
-            else
+            if (CurrentPlaylist.Count() == 1)
             {
                 CurrentTrack = CurrentPlaylist.First();
                 NextTrack = CurrentPlaylist.First();
                 PreviousTrack = CurrentPlaylist.First();
+            }
+            if (CurrentPlaylist.Count() == 0)
+            {
+                CurrentTrack = null;
+                NextTrack = null;
+                PreviousTrack = null;
             }
         }
 
@@ -113,37 +119,40 @@ namespace Phase_v2._0
 
         static public void PlayTrack(Track track)
         {
-            CurrentTrack = track;
-            pauseTime = 0;
-
-            if (CurrentPlaylist.Count() > 1)
+            if (CurrentPlaylist != null)
             {
-                if (CurrentTrack == CurrentPlaylist.Last())
-                {
-                    PreviousTrack = CurrentPlaylist[CurrentPlaylist.IndexOf(CurrentTrack) - 1];
-                    NextTrack = CurrentPlaylist.First();
-                }
+                CurrentTrack = track;
+                pauseTime = 0;
 
-                else
+                if (CurrentPlaylist.Count() > 1)
                 {
-                    if (CurrentTrack == CurrentPlaylist.First())
-                    {
-                        PreviousTrack = CurrentPlaylist.Last();
-                        NextTrack = CurrentPlaylist[CurrentPlaylist.IndexOf(CurrentTrack) + 1];
-                    }
-                    else
+                    if (CurrentTrack == CurrentPlaylist.Last())
                     {
                         PreviousTrack = CurrentPlaylist[CurrentPlaylist.IndexOf(CurrentTrack) - 1];
-                        NextTrack = CurrentPlaylist[CurrentPlaylist.IndexOf(CurrentTrack) + 1];
+                        NextTrack = CurrentPlaylist.First();
+                    }
+
+                    else
+                    {
+                        if (CurrentTrack == CurrentPlaylist.First())
+                        {
+                            PreviousTrack = CurrentPlaylist.Last();
+                            NextTrack = CurrentPlaylist[CurrentPlaylist.IndexOf(CurrentTrack) + 1];
+                        }
+                        else
+                        {
+                            PreviousTrack = CurrentPlaylist[CurrentPlaylist.IndexOf(CurrentTrack) - 1];
+                            NextTrack = CurrentPlaylist[CurrentPlaylist.IndexOf(CurrentTrack) + 1];
+                        }
                     }
                 }
+
+                Console.WriteLine(PreviousTrack.TrackTitle);
+                Console.WriteLine(CurrentTrack.TrackTitle);
+                Console.WriteLine(NextTrack.TrackTitle + "\n");
+
+                StartPlaying();
             }
-
-            Console.WriteLine(PreviousTrack.TrackTitle);
-            Console.WriteLine(CurrentTrack.TrackTitle);
-            Console.WriteLine(NextTrack.TrackTitle + "\n");
-
-            StartPlaying();
         }
 
         static public void Pause()
@@ -156,13 +165,28 @@ namespace Phase_v2._0
         {  
             PlayTrack(NextTrack);
 
+            //Selection in playlist
             int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
             PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);
+
+            //Title
+            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Content = CurrentTrack.TrackTitle;
+            //Icon
+            ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
         }
 
         static public void Previous()
         {
             PlayTrack(PreviousTrack);
+
+            //Selection in playlist
+            int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
+            PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);
+
+            //Title
+            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Content = CurrentTrack.TrackTitle;
+            //Icon
+            ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
         }
 
         static public void LoopOn()
@@ -220,6 +244,21 @@ namespace Phase_v2._0
         static public void SetVolumeLevel(double level)
         {
             player.Volume = level;
+        }
+
+        static public void Stop()
+        {
+            Pause();
+
+            CurrentPlaylist = null;
+            pauseTime = 0;
+
+            PreviousTrack = null;
+            CurrentTrack = null;
+            NextTrack = null;
+
+            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Content = null;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/play.png", UriKind.RelativeOrAbsolute));
         }
 
     }

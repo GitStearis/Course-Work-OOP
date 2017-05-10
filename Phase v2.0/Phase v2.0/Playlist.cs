@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace Phase_v2._0
 {
@@ -50,7 +51,23 @@ namespace Phase_v2._0
         //MAKE PLAYLIST SAVING
         public void Save(string path)
         {
+            XDocument doc = new XDocument();
 
+            XElement playlist = new XElement("playlist");
+
+            XElement tracklist = new XElement("tracklist");
+            foreach (var track in Tracklist)
+            {
+                XElement trackElement = new XElement("track");
+                trackElement.Add(new XElement("title", track.TrackTitle),
+                                new XElement("uri", track.TrackUri));
+                tracklist.Add(trackElement);
+            }
+
+            playlist.Add(tracklist);
+            doc.Add(playlist);
+
+            doc.Save(path);
         }
     }
 }

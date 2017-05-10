@@ -132,6 +132,7 @@ namespace Phase_v2._0
             }
         }
 
+        //TOP MENU
         private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
             if (isMenuOpened == false)
@@ -172,6 +173,11 @@ namespace Phase_v2._0
             selectedTab = false;
             CustomPlaylistTab.Focus();
         }
+        private void OpenPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            PlaylistManager.OpenPlaylist();
+        }
+
 
         private void PlaylistButton_Click(object sender, RoutedEventArgs e)
         {
@@ -328,6 +334,8 @@ namespace Phase_v2._0
             {
                 if (DefaultPlaylistBox.SelectedItem != null)
                 {
+                    //Works not well with loading playlist. Fix it
+
                     Track selectedTrack = PlaylistManager.defaultPlaylist.Tracklist[DefaultPlaylistBox.Items.IndexOf(DefaultPlaylistBox.SelectedItem)];
                     PlaylistManager.RemoveTrack(selectedTab, selectedTrack);
                 }
@@ -395,5 +403,6 @@ namespace Phase_v2._0
             MuteButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
             Player.SetVolumeLevel(VolumeLevelSlider.Value / 100);
         }
+
     }
 }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace Phase_v2._0
@@ -179,22 +180,88 @@ namespace Phase_v2._0
             saveFileDialog.InitialDirectory = @"d:\";
             saveFileDialog.Filter = "Playlist file (*.pl)|*.pl";
 
-            if (saveFileDialog.ShowDialog() == true)
+            if (selectedTab == true)
             {
-                if (saveFileDialog.FileName.EndsWith(".pl"))
+                if (defaultPlaylist != null)
                 {
-                    if (selectedTab == true)
+                    if (saveFileDialog.ShowDialog() == true)
                     {
-
+                        if (saveFileDialog.FileName.EndsWith(".pl"))
+                        {
+                            defaultPlaylist.Save(saveFileDialog.FileName);
+                        }
                     }
-                    else
+                }
+            }
+            else
+            {
+                if (customPlaylist != null)
+                {
+                    if (saveFileDialog.ShowDialog() == true)
                     {
+                        if (saveFileDialog.FileName.EndsWith(".pl"))
+                        {
+                            customPlaylist.Save(saveFileDialog.FileName);
+                        }
+                    } 
+                }
+            }
+            
+        }
 
-                    }
+        //Works not well with deleting. Fix it
+        static public void OpenPlaylist()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.DefaultExt = "pl";
+            openFileDialog.AddExtension = true;
+            openFileDialog.Title = "Open playlist";
+            openFileDialog.InitialDirectory = @"d:\";
+            openFileDialog.Filter = "Playlist file (*.pl)|*.pl";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                Playlist openedPlaylist = Load(openFileDialog.FileName);
+                activePlaylist = true;
+
+                //To playlist manager
+                defaultPlaylist.Tracklist.Clear();
+                defaultPlaylist = openedPlaylist;
+                //To player
+                Player.Load(defaultPlaylist);
+                //To playlist window
+                ((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.Items.Clear();
+                foreach (var track in defaultPlaylist.Tracklist)
+                {
+                    ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Add(track.TrackTitle);
                 }
             }
         }
 
+        static private Playlist Load(string path)
+        {
+            Playlist tempPlaylist = new Playlist();
 
+            XDocument doc = XDocument.Load(path);
+
+            var playlist = doc.Elements();
+
+            var tracklist = playlist.Elements();
+
+            foreach (var track in tracklist.Elements())
+            {
+                string trackTitle = track.Element("title").Value;
+                Uri trackUri = new Uri(track.Element("uri").Value);
+
+                Track tempTrack = new Track();
+
+                tempTrack.TrackTitle = trackTitle;
+                tempTrack.TrackUri = trackUri;
+
+                tempPlaylist.Tracklist.Add(tempTrack);
+            }
+
+            return tempPlaylist;
+        }
     }
 }

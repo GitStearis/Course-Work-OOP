@@ -308,10 +308,6 @@ namespace Phase_v2._0
             Player.Load(PlaylistManager.GetActivePlaylist());
         }
 
-        private void RefreshBox()
-        {
-            
-        }
         private void AddTrackButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();

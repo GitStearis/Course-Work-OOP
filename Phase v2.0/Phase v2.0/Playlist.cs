@@ -48,6 +48,21 @@ namespace Phase_v2._0
             return result;
         }
 
+        public string[] ToStringArray()
+        {
+            string[] result = null;
+            List<string> temp = new List<string>();
+            foreach (var track in Tracklist)
+            {
+                temp.Add(track.TrackUri.ToString());
+            }
+
+            result = temp.ToArray();
+
+            return result;
+
+        }
+
         //MAKE PLAYLIST SAVING
         public void Save(string path)
         {

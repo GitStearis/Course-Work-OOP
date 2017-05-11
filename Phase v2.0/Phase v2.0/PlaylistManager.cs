@@ -222,19 +222,15 @@ namespace Phase_v2._0
             if (openFileDialog.ShowDialog() == true)
             {
                 Playlist openedPlaylist = Load(openFileDialog.FileName);
+
+                Player.Stop();
+
+                defaultPlaylist.Tracklist.Clear();
+                ((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.Items.Clear();
+
                 activePlaylist = true;
 
-                //To playlist manager
-                defaultPlaylist.Tracklist.Clear();
-                defaultPlaylist = openedPlaylist;
-                //To player
-                Player.Load(defaultPlaylist);
-                //To playlist window
-                ((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.Items.Clear();
-                foreach (var track in defaultPlaylist.Tracklist)
-                {
-                    ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Add(track.TrackTitle);
-                }
+                AddTracks(openedPlaylist.ToStringArray());
             }
         }
 
@@ -259,6 +255,7 @@ namespace Phase_v2._0
                 tempTrack.TrackUri = trackUri;
 
                 tempPlaylist.Tracklist.Add(tempTrack);
+                Player.Load(tempPlaylist);
             }
 
             return tempPlaylist;

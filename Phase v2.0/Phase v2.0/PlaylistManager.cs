@@ -96,7 +96,7 @@ namespace Phase_v2._0
                     }
                 }
 
-                if (Player.CurrentPlaylist.Count() > 1)
+                if (Player.CurrentPlaylist.Tracklist.Count > 1)
                 {
                     if (activePlaylist == true)
                     {
@@ -226,7 +226,7 @@ namespace Phase_v2._0
                 Player.Stop();
 
                 defaultPlaylist.Tracklist.Clear();
-                ((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.Items.Clear();
+                ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Clear();
 
                 activePlaylist = true;
 
@@ -259,6 +259,22 @@ namespace Phase_v2._0
             }
 
             return tempPlaylist;
+        }
+
+        static public void Clear(bool selectedTab)
+        {
+            Player.Stop();
+
+            if (selectedTab == true)
+            {
+                defaultPlaylist.Tracklist.Clear();
+                ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Clear();
+            }
+            else
+            {
+                customPlaylist.Tracklist.Clear();
+                ((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.Items.Clear();
+            }
         }
     }
 }

@@ -1,9 +1,5 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,6 +15,9 @@ namespace Phase_v2._0
 
         private bool isMenuOpened = false;
         private bool isDraggingPosition;
+        private bool isClickedPosition = false;
+
+        private double value = 0;
 
         //TRUE - for default
         //FALSE - for custom
@@ -34,10 +33,13 @@ namespace Phase_v2._0
             DefaultPlaylistBox.MouseDoubleClick += DefaultPlaylist_TrackDoubleClick;
             CustomPlaylistBox.MouseDoubleClick += CustomPlaylist_TrackDoubleClick;
 
+            VolumeLevelSlider.ValueChanged += VolumeLevelSlider_Click;
+
             Player.SetVolumeLevel(1);
 
             Player.Load(PlaylistManager.GetActivePlaylist());
         }
+
 
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -50,7 +52,7 @@ namespace Phase_v2._0
 
         private void PreviousButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Player.CurrentPlaylist.Count() > 0)
+            if (Player.CurrentPlaylist.Tracklist.Count > 0)
             {
                 Player.isPlaying = true;
 
@@ -64,7 +66,7 @@ namespace Phase_v2._0
         {
             if (Player.CurrentPlaylist != null)
             {
-                if (Player.CurrentPlaylist.Count() > 0)
+                if (Player.CurrentPlaylist.Tracklist.Count > 0)
                 {
                     if (Player.isPlaying == false)
                     {
@@ -94,7 +96,7 @@ namespace Phase_v2._0
         }
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Player.CurrentPlaylist.Count() > 0)
+            if (Player.CurrentPlaylist.Tracklist.Count > 0)
             {
                 Player.isPlaying = true;
 
@@ -190,7 +192,7 @@ namespace Phase_v2._0
 
             if (Player.CurrentPlaylist != null)
             {
-                if (Player.CurrentPlaylist.Count() > 0)
+                if (Player.CurrentPlaylist.Tracklist.Count > 0)
                 {
 
                     int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack);
@@ -208,7 +210,7 @@ namespace Phase_v2._0
 
             if (Player.CurrentPlaylist != null)
             {
-                if (Player.CurrentPlaylist.Count() > 0)
+                if (Player.CurrentPlaylist.Tracklist.Count > 0)
                 {
                     int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack);
                     if (index >= 0)
@@ -323,7 +325,6 @@ namespace Phase_v2._0
 
             Player.Load(PlaylistManager.GetActivePlaylist());
         }
-
         private void RemoveTrackButton_Click(object sender, RoutedEventArgs e)
         {
             if (selectedTab == true)
@@ -346,15 +347,23 @@ namespace Phase_v2._0
                 }
             }
         }
+        private void ClearCurrentPlaylistButton_Click(object sender, RoutedEventArgs e)
+        {
+            PlaylistManager.Clear(selectedTab);
+        }
 
         private void SaveCurrentPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
             PlaylistManager.SaveSelectedPlaylist(selectedTab);
         }
+        private void LoadPlaylistButton_Click(object sender, RoutedEventArgs e)
+        {
+            PlaylistManager.OpenPlaylist();
+        }
 
         private void ChangeSliderPosition(object sender, EventArgs e)
         {
-            if (!isDraggingPosition)
+            if (!isDraggingPosition && !isClickedPosition)
             {
                 if (Player.player.NaturalDuration.HasTimeSpan == true)
                 {
@@ -372,7 +381,7 @@ namespace Phase_v2._0
         {
             isDraggingPosition = false;
 
-            if (Player.CurrentPlaylist.Count() > 0)
+            if (Player.CurrentPlaylist.Tracklist.Count > 0)
             {
                 Player.pauseTime = Player.totalTime * TrackProgressSlider.Value / 1000;
                 Player.StartPlaying();
@@ -399,6 +408,15 @@ namespace Phase_v2._0
             MuteButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
             Player.SetVolumeLevel(VolumeLevelSlider.Value / 100);
         }
+
+        private void VolumeLevelSlider_Click(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Player.MuteOff();
+            MuteButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
+            Player.SetVolumeLevel(VolumeLevelSlider.Value / 100);
+        }
+
+
 
     }
 }

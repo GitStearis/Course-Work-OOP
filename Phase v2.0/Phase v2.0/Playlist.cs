@@ -19,11 +19,6 @@ namespace Phase_v2._0
 
         }
 
-        public int Count()
-        {
-            return Tracklist.Count;
-        }
-
         public int IndexOf(Track track)
         {
             return Tracklist.IndexOf(track);

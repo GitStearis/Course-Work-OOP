@@ -35,18 +35,18 @@ namespace Phase_v2._0
 
         static public void Load(Playlist value)
         {
-            if (value.Count() > 0)
+            if (value.Tracklist.Count > 0)
             {
                 CurrentPlaylist = value;
                 pauseTime = 0;
 
-                if (value.Count() == 1)
+                if (value.Tracklist.Count == 1)
                 {
                     CurrentTrack = CurrentPlaylist.First();
                     NextTrack = CurrentPlaylist.First();
                     PreviousTrack = CurrentPlaylist.First();
                 }
-                if (value.Count() > 1)
+                if (value.Tracklist.Count > 1)
                 {
                     CurrentTrack = CurrentPlaylist.First();
                     NextTrack = CurrentPlaylist[1];
@@ -56,19 +56,19 @@ namespace Phase_v2._0
         }
         static public void Reload()
         {
-            if (CurrentPlaylist.Count() > 1)
+            if (CurrentPlaylist.Tracklist.Count > 1)
             {
                 CurrentTrack = CurrentPlaylist.First();
                 NextTrack = CurrentPlaylist[1];
                 PreviousTrack = CurrentPlaylist.Last();
             }
-            if (CurrentPlaylist.Count() == 1)
+            if (CurrentPlaylist.Tracklist.Count == 1)
             {
                 CurrentTrack = CurrentPlaylist.First();
                 NextTrack = CurrentPlaylist.First();
                 PreviousTrack = CurrentPlaylist.First();
             }
-            if (CurrentPlaylist.Count() == 0)
+            if (CurrentPlaylist.Tracklist.Count == 0)
             {
                 CurrentTrack = null;
                 NextTrack = null;
@@ -78,7 +78,7 @@ namespace Phase_v2._0
 
         static public void StartPlaying()
         {
-            if (CurrentPlaylist.Count() > 0)
+            if (CurrentPlaylist.Tracklist.Count > 0)
             {
                 Console.WriteLine(PreviousTrack.TrackTitle);
                 Console.WriteLine(CurrentTrack.TrackTitle);
@@ -124,7 +124,7 @@ namespace Phase_v2._0
                 CurrentTrack = track;
                 pauseTime = 0;
 
-                if (CurrentPlaylist.Count() > 1)
+                if (CurrentPlaylist.Tracklist.Count > 1)
                 {
                     if (CurrentTrack == CurrentPlaylist.Last())
                     {
@@ -159,6 +159,21 @@ namespace Phase_v2._0
         {
             pauseTime = player.Position.TotalMilliseconds;
             player.Pause();
+        }
+
+        static public void Stop()
+        {
+            Pause();
+
+            CurrentPlaylist = new Playlist();
+            pauseTime = 0;
+
+            PreviousTrack = new Track();
+            CurrentTrack = new Track();
+            NextTrack = new Track();
+
+            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Content = null;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/play.png", UriKind.RelativeOrAbsolute));
         }
 
         static public void Next()
@@ -245,21 +260,5 @@ namespace Phase_v2._0
         {
             player.Volume = level;
         }
-
-        static public void Stop()
-        {
-            Pause();
-
-            CurrentPlaylist = null;
-            pauseTime = 0;
-
-            PreviousTrack = null;
-            CurrentTrack = null;
-            NextTrack = null;
-
-            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Content = null;
-            ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/play.png", UriKind.RelativeOrAbsolute));
-        }
-
     }
 }

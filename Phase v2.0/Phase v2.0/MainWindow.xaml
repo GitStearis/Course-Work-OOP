@@ -206,7 +206,7 @@
                 Name="Pad" 
                 Grid.Row="1" 
                 Grid.Column="0" 
-                Background="Gray">
+                Background="BurlyWood">
         </Canvas>
 
         <Button Style="{StaticResource CommonButton}" x:Name="MinimizeButton" Click="MinimizeButton_Click" Margin="385,10,65,668" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
@@ -291,8 +291,7 @@
                     </ContextMenu.Style>
                     <MenuItem x:Name="OpenTrack" Header="Open track" Click="OpenTrack_Click"/>
                     <MenuItem x:Name="OpenPlaylist" Header="Open playlist" Click="OpenPlaylist_Click"/>
-                    <MenuItem Header="Save playlist"/>
-                    <MenuItem Header="Save playlist as"/>
+                    <MenuItem x:Name="SavePlaylistAs" Header="Save playlist as" Click="SavePlaylistAs_Click"/>
                     <Separator />
                     <MenuItem Header="About"/>
                     <MenuItem Header="Exit"/>

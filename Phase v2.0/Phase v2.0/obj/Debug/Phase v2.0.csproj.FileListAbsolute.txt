@@ -24,3 +24,4 @@ D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\Phase_v2._0.Properties
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.csproj.GenerateResource.Cache
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.exe
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.pdb
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\bin\Debug\NAudio.dll

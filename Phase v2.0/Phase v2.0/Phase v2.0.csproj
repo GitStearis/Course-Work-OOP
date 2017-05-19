@@ -37,6 +37,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NAudio">
+      <HintPath>.\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -57,7 +60,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Track.cs" />
+    <Compile Include="Analyzer\Analyzer.cs" />
+    <Compile Include="Visualizer\CubesContainer.cs" />
+    <Compile Include="Visualizer\CubesForms.cs" />
+    <Compile Include="Visualizer\RandomColor.cs" />
+    <Compile Include="Audio\Track.cs" />
+    <Compile Include="Visualizer\Visualizer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -72,8 +80,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Player.cs" />
-    <Compile Include="Playlist.cs" />
+    <Compile Include="Audio\Player.cs" />
+    <Compile Include="Audio\Playlist.cs" />
     <Compile Include="PlaylistManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -100,20 +108,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="playlist1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="playlist2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="playlist3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="save.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="minus.png" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

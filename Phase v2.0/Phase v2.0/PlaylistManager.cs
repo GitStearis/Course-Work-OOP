@@ -54,7 +54,7 @@ namespace Phase_v2._0
         {
             List<string> paths = ValidateTracks(files);
 
-            if (activePlaylist == true)
+            if (((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab == true)
             {
                 foreach (var file in paths)
                 {
@@ -81,33 +81,24 @@ namespace Phase_v2._0
             Console.WriteLine("Selected tab = " + selectedTab);
             Console.WriteLine("Active playlist = " + activePlaylist);
 
+            Track tempCurrentTrack = Player.CurrentTrack;
+
             if (selectedTab == activePlaylist)
             {
-                if (track == Player.CurrentTrack)
-                {
-                    if (Player.isPlaying == true)
-                    {
-                        Console.WriteLine("Playing next!");
-                        Player.Next();
-                    }
-                    else
-                    {
-
-                    }
-                }
-
                 if (Player.CurrentPlaylist.Tracklist.Count > 1)
                 {
                     if (activePlaylist == true)
                     {
-                        defaultPlaylist.Tracklist.Remove(track);
-                        ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Remove(track);
+                        defaultPlaylist.Tracklist.Remove(track);                        
+                        ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Remove(((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.SelectedItem);
+
                     }
                     else
                     {
                         customPlaylist.Tracklist.Remove(track);
-                        ((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.Items.Remove(track);
+                        ((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.Items.Remove(((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.SelectedItem);
                     }
+
 
                     Player.CurrentPlaylist.Tracklist.Remove(track);
                     Player.Reload();
@@ -134,12 +125,24 @@ namespace Phase_v2._0
                 if (selectedTab == true)
                 {
                     defaultPlaylist.Tracklist.Remove(track);
-                    ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Remove(track);
+                    ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Remove(((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.SelectedItem);
                 }
                 else
                 {
                     customPlaylist.Tracklist.Remove(track);
-                    ((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.Items.Remove(track);
+                    ((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.Items.Remove(((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.SelectedItem);
+                }
+            }
+
+            if (track == tempCurrentTrack)
+            {
+                if (Player.isPlaying == true)
+                {
+                    Player.Current();
+                }
+                else
+                {
+
                 }
             }
         }
@@ -206,10 +209,9 @@ namespace Phase_v2._0
                     } 
                 }
             }
-            
+          
         }
 
-        //Works not well with deleting. Fix it
         static public void OpenPlaylist()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -219,19 +221,25 @@ namespace Phase_v2._0
             openFileDialog.InitialDirectory = @"d:\";
             openFileDialog.Filter = "Playlist file (*.pl)|*.pl";
 
+
             if (openFileDialog.ShowDialog() == true)
             {
+                ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistTab.Focus();
+
                 Playlist openedPlaylist = Load(openFileDialog.FileName);
 
+                //Stop and clear
                 Player.Stop();
-
                 defaultPlaylist.Tracklist.Clear();
                 ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Clear();
 
+                //Add to the player and playlist tab
                 activePlaylist = true;
-
                 AddTracks(openedPlaylist.ToStringArray());
+                defaultPlaylist = openedPlaylist;
+                Player.Load(defaultPlaylist);
             }
+
         }
 
         static private Playlist Load(string path)
@@ -255,7 +263,6 @@ namespace Phase_v2._0
                 tempTrack.TrackUri = trackUri;
 
                 tempPlaylist.Tracklist.Add(tempTrack);
-                Player.Load(tempPlaylist);
             }
 
             return tempPlaylist;

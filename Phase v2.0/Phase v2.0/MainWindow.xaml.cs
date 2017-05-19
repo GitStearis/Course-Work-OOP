@@ -11,13 +11,11 @@ namespace Phase_v2._0
 {
     public partial class MainWindow : Window
     {
-        DispatcherTimer sliderTimer = new DispatcherTimer();
+        public DispatcherTimer sliderTimer = new DispatcherTimer();
 
         private bool isMenuOpened = false;
         private bool isDraggingPosition;
         private bool isClickedPosition = false;
-
-        private double value = 0;
 
         //TRUE - for default
         //FALSE - for custom
@@ -38,9 +36,12 @@ namespace Phase_v2._0
             Player.SetVolumeLevel(1);
 
             Player.Load(PlaylistManager.GetActivePlaylist());
+
+            CubesContainer.InitializeField(Pad);
+            CubesContainer.SetRandomly();
         }
 
-
+        //WINDOW CONTROL BUTTONS
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             Main.WindowState = WindowState.Minimized;
@@ -50,6 +51,8 @@ namespace Phase_v2._0
             Close();
         }
 
+
+        //PLAYER BUTTONS
         private void PreviousButton_Click(object sender, RoutedEventArgs e)
         {
             if (Player.CurrentPlaylist.Tracklist.Count > 0)
@@ -62,6 +65,7 @@ namespace Phase_v2._0
                 TrackProgressSlider.Value = 0;
             }
         }
+
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
             if (Player.CurrentPlaylist != null)
@@ -79,6 +83,7 @@ namespace Phase_v2._0
                         CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
                         PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
+
                         sliderTimer.Start();
                     }
                     else
@@ -94,6 +99,7 @@ namespace Phase_v2._0
                 }
             }
         }
+
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
             if (Player.CurrentPlaylist.Tracklist.Count > 0)
@@ -120,6 +126,7 @@ namespace Phase_v2._0
                 LoopButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
             }
         }
+
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
             if (Player.isShuffled == false)
@@ -151,6 +158,7 @@ namespace Phase_v2._0
                 isMenuOpened = false;
             }
         }
+
         private void OpenTrack_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -163,6 +171,10 @@ namespace Phase_v2._0
             //Firstly clear playlist
             PlaylistManager.ClearActivePlaylist();
 
+            //Firstly focus the custom tab
+            CustomPlaylistTab.Focus();
+
+            //Then add files
             if (openFileDialog.ShowDialog() == true)
             {
                 string[] files = openFileDialog.FileNames;
@@ -173,19 +185,39 @@ namespace Phase_v2._0
 
             PlaylistManager.activePlaylist = false;
             selectedTab = false;
-            CustomPlaylistTab.Focus();
+
+            //Close menu
+            if ((sender as Button) != null)
+            {
+                (sender as Button).ContextMenu.IsOpen = false;
+            }
+            isMenuOpened = false;
         }
+
         private void OpenPlaylist_Click(object sender, RoutedEventArgs e)
         {
             PlaylistManager.OpenPlaylist();
+
+            //Close menu
+            if ((sender as Button) != null)
+            {
+                (sender as Button).ContextMenu.IsOpen = false;
+            }
+            isMenuOpened = false;
         }
 
+        private void SavePlaylistAs_Click(object sender, RoutedEventArgs e)
+        {
+            PlaylistManager.SaveSelectedPlaylist(selectedTab);
+        }
 
         private void PlaylistButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
+
+        //PLAYLIST SECTION
         private void DefaultPlaylistTab_GotFocus(object sender, RoutedEventArgs e)
         {
             selectedTab = true;
@@ -252,6 +284,7 @@ namespace Phase_v2._0
             sliderTimer.Start();
             TrackProgressSlider.Value = 0;
         }
+
         private void CustomPlaylist_TrackDoubleClick(Object sender, MouseButtonEventArgs e)
         {
             selectedTab = false;
@@ -296,6 +329,7 @@ namespace Phase_v2._0
 
             Player.Load(PlaylistManager.GetActivePlaylist());
         }
+
         private void CustomPlaylistDrop(object sender, DragEventArgs e)
         {
             PlaylistManager.activePlaylist = false;
@@ -310,6 +344,8 @@ namespace Phase_v2._0
             Player.Load(PlaylistManager.GetActivePlaylist());
         }
 
+
+        //BOTTOM BUTTONS
         private void AddTrackButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -325,14 +361,13 @@ namespace Phase_v2._0
 
             Player.Load(PlaylistManager.GetActivePlaylist());
         }
+
         private void RemoveTrackButton_Click(object sender, RoutedEventArgs e)
         {
             if (selectedTab == true)
             {
                 if (DefaultPlaylistBox.SelectedItem != null)
                 {
-                    //Works not well with loading playlist. Fix it
-
                     Track selectedTrack = PlaylistManager.defaultPlaylist.Tracklist[DefaultPlaylistBox.Items.IndexOf(DefaultPlaylistBox.SelectedItem)];
                     PlaylistManager.RemoveTrack(selectedTab, selectedTrack);
                 }
@@ -341,12 +376,12 @@ namespace Phase_v2._0
             {
                 if (CustomPlaylistBox.SelectedItem != null)
                 {
-
                     Track selectedTrack = PlaylistManager.customPlaylist.Tracklist[CustomPlaylistBox.Items.IndexOf(CustomPlaylistBox.SelectedItem)];
                     PlaylistManager.RemoveTrack(selectedTab, selectedTrack);
                 }
             }
         }
+
         private void ClearCurrentPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
             PlaylistManager.Clear(selectedTab);
@@ -356,11 +391,14 @@ namespace Phase_v2._0
         {
             PlaylistManager.SaveSelectedPlaylist(selectedTab);
         }
+
         private void LoadPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
             PlaylistManager.OpenPlaylist();
         }
 
+
+        //POSITION SLIDER
         private void ChangeSliderPosition(object sender, EventArgs e)
         {
             if (!isDraggingPosition && !isClickedPosition)
@@ -375,6 +413,7 @@ namespace Phase_v2._0
         private void TrackProgressSlider_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
             isDraggingPosition = true;
+            Visualizer.PauseCurrentVisualization();
         }
 
         private void TrackProgressSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
@@ -388,6 +427,8 @@ namespace Phase_v2._0
             }
         }
 
+
+        //VOLUME
         private void MuteButton_Click(object sender, RoutedEventArgs e)
         {
             if (Player.isMuted == false)
@@ -402,6 +443,8 @@ namespace Phase_v2._0
             }
         }
 
+
+        //VOLUME SLIDER
         private void VolumeLevelSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             Player.MuteOff();
@@ -415,8 +458,5 @@ namespace Phase_v2._0
             MuteButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
             Player.SetVolumeLevel(VolumeLevelSlider.Value / 100);
         }
-
-
-
     }
 }

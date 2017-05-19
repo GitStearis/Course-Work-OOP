@@ -1,0 +1,57 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows.Media;
+using NAudio.Wave;
+using System.Windows.Threading;
+
+namespace Phase_v2._0
+{
+    static class Visualizer
+    {
+        static private Mp3FileReader reader;
+        static public DispatcherTimer visualizationTimer = new DispatcherTimer();
+        static private bool isLined = true;
+        static private int length = 0;
+
+        static public void StartVisualization(string path)
+        {
+            reader = Analyzer.GetInfo(path);
+
+            visualizationTimer = new DispatcherTimer();
+            visualizationTimer.Interval = TimeSpan.FromMilliseconds(1000);
+            visualizationTimer.Tick += new EventHandler(DrawLength);
+            visualizationTimer.Start();
+
+            
+        }
+
+        static public void DrawLength(object sender, EventArgs e)
+        {
+            if (isLined)
+            {
+                isLined = false;
+
+                if (length != reader.Id3v1Tag.Length)
+                {
+                    byte r = reader.Id3v1Tag[length];
+                    byte g = (byte)(reader.Id3v1Tag[length] + 20);
+                    byte b = (byte)(reader.Id3v1Tag[length] + 50);
+                    CubesForms.VerticalLine(3, new Color() { R = r, G = g, B = b, A = 90 });
+
+                    length++;
+                }
+                  
+
+
+            }
+            else
+            {
+                isLined = true;
+
+                CubesForms.VerticalLine(3, RandomColor.Generate(90));
+            }
+        }
+    }
+}

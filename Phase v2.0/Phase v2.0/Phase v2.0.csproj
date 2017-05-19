@@ -60,7 +60,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Analyzer\Analyzer.cs" />
     <Compile Include="Visualizer\CubesContainer.cs" />
     <Compile Include="Visualizer\CubesForms.cs" />
     <Compile Include="Visualizer\RandomColor.cs" />

@@ -2,6 +2,7 @@
 using System.Windows.Media;
 using NAudio.Wave;
 using System.Windows.Threading;
+using System.Threading;
 
 namespace Phase_v2._0
 {
@@ -9,39 +10,42 @@ namespace Phase_v2._0
     {
         static private Mp3FileReader reader;
         static public DispatcherTimer visualizationTimer = new DispatcherTimer();
-
+        static private string filepath = "";
         static private Mp3Frame frame;
 
         static public void StartVisualization(string path)
-        {
-            reader = new Mp3FileReader(path);
-            frame = reader.ReadNextFrame();
+        {        
+            if (path != filepath)
+            {
+                reader = new Mp3FileReader(path);
+                frame = reader.ReadNextFrame();
+            }
+            filepath = path;
 
             visualizationTimer = new DispatcherTimer();
-            visualizationTimer.Interval = TimeSpan.FromMilliseconds(500);
+            visualizationTimer.Interval = TimeSpan.FromMilliseconds(100);
 
-            //visualizationTimer.Tick += new EventHandler(DrawLength);
-            visualizationTimer.Tick += new EventHandler(DrawMesh);
+            visualizationTimer.Tick += new EventHandler(DrawWave);
+            //visualizationTimer.Tick += new EventHandler(DrawBeats);
 
             visualizationTimer.Start();          
         }
 
         static public void PauseCurrentVisualization()
         {
-            //visualizationTimer.Tick -= new EventHandler(DrawLength);
-            visualizationTimer.Tick -= new EventHandler(DrawMesh);
+            visualizationTimer.Tick -= new EventHandler(DrawWave);
+            //visualizationTimer.Tick -= new EventHandler(DrawBeats);
         }
 
         static public void StopVisualizaton()
         {
-            //visualizationTimer.Tick -= new EventHandler(DrawLength);
-            visualizationTimer.Tick -= new EventHandler(DrawMesh);
+            visualizationTimer.Tick -= new EventHandler(DrawWave);
+            //visualizationTimer.Tick -= new EventHandler(DrawBeats);
             visualizationTimer.Stop();
         }
 
         static private Color GenerateColor(int shift)
         {
-
             int index = Player.player.Position.Seconds;
             int constant = Player.CurrentTrack.GetHashCode() % 100;
 
@@ -69,6 +73,24 @@ namespace Phase_v2._0
             return color;
         }
 
+        static private void DrawColumn(int shift)
+        {
+            int index = Player.player.Position.Seconds;
+
+            byte currentByte = frame.RawData[index + shift];
+
+            if (currentByte == 0 || currentByte == 85)//IDK why 85
+            {
+                frame = reader.ReadNextFrame();
+            }
+
+            for (int i = 0; i < currentByte % 12; i++)
+            {
+                CubesContainer.SetCube(shift, i, GenerateColor(shift));
+                CubesContainer.SetCube(shift, CubesContainer.maxCubesY - 1 - i, GenerateColor(shift));
+            }
+        }
+
         static private void DrawLength(object sender, EventArgs e)
         {
             for (int i = 0; i < CubesContainer.maxCubesX; i++)
@@ -89,6 +111,23 @@ namespace Phase_v2._0
                     CubesForms.HorizontalLine(doubleI, GenerateColor(i + 1));
                     CubesForms.HorizontalLine(CubesContainer.maxCubesY - doubleI - 1, GenerateColor(i + 1));
                 }
+            }
+        }
+
+        static private void DrawHeight(object sender, EventArgs e)
+        {
+            for (int i = 0; i < CubesContainer.maxCubesY; i++)
+            {
+                CubesForms.HorizontalLine(i, GenerateColor(i));
+            }
+        }
+
+        static private void DrawWave(object sender, EventArgs e)
+        {
+            CubesContainer.SetWithColor(Colors.Moccasin);
+            for (int i = 0; i < CubesContainer.maxCubesX; i++)
+            {
+                DrawColumn(i);
             }
         }
     }

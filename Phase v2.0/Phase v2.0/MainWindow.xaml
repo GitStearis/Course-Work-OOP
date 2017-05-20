@@ -409,7 +409,7 @@
                 </Border>
             </StackPanel>
         </Button>
-        
+
         <Button Style="{StaticResource CommonButton}" x:Name="AddTrackButton" Click="AddTrackButton_Click" Margin="330,668,120,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
@@ -439,7 +439,7 @@
         </Button>
 
         <Label x:Name="CurrentTrackLabel" Content="" HorizontalAlignment="Left" Margin="120,132,0,0" VerticalAlignment="Top" FontFamily="Century Gothic" FontSize="14"/>
-        
+
         <Slider Style="{StaticResource Horizontal_Slider}" x:Name="VolumeLevelSlider" Width="150"
             Maximum="100" Minimum="1" Value="100" TickFrequency="1"
             TickPlacement="None" Margin="230,214,120,494" 
@@ -457,9 +457,5 @@
                 </Border>
             </StackPanel>
         </Button>
-
-
-
     </Grid>
-
 </Window>

@@ -17,33 +17,23 @@ namespace Phase_v2._0
 
         static public void InitializeField(Canvas pad)
         {
-            try
+            for (int y = 0; y < pad.Height; y += cubeSize)
             {
-                for (int y = 0; y < pad.Height; y += cubeSize)
+                List<Rectangle> line = new List<Rectangle>();
+
+                for (int x = 0; x < pad.Width; x += cubeSize)
                 {
-                    List<Rectangle> line = new List<Rectangle>();
-
-                    for (int x = 0; x < pad.Width; x += cubeSize)
-                    {
-                        line.Add(NewCube(x, y));
-                    }
-
-                    field.Add(line);
+                    line.Add(NewCube(x, y));
                 }
-                Console.WriteLine("List of cubes initialized...");
 
-                //Borders of field
-                maxCubesX = field[0].IndexOf(field[0].Last()) + 1;
-                maxCubesY = field.IndexOf(field.Last()) + 1;
-                Console.WriteLine("Borders initialized...");
+                field.Add(line);
+            }
 
-                AddToCanvas(pad);
-            }
-            catch (System.Exception error)
-            {
-                Console.WriteLine(error.Message);
-                Console.WriteLine(error.Data);
-            }
+            //Borders of field
+            maxCubesX = field[0].IndexOf(field[0].Last()) + 1;
+            maxCubesY = field.IndexOf(field.Last()) + 1;
+
+            AddToCanvas(pad);
         }
 
         static private Rectangle NewCube(int x, int y)
@@ -76,11 +66,8 @@ namespace Phase_v2._0
 
         static public void SetCube(int xIndex, int yIndex, Color col)
         {
-            if (xIndex >= 0 && yIndex >= 0 && xIndex < maxCubesX && yIndex < maxCubesY)
-            {
-                field[yIndex][xIndex].Stroke = new SolidColorBrush(col);
-                field[yIndex][xIndex].Fill = new SolidColorBrush(col);
-            }
+            field[yIndex][xIndex].Stroke = new SolidColorBrush(col);
+            field[yIndex][xIndex].Fill = new SolidColorBrush(col);
         }
 
         static public void Clear()
@@ -104,6 +91,18 @@ namespace Phase_v2._0
                     Color tempColor = RandomColor.Generate(60);
                     element.Stroke = new SolidColorBrush(tempColor);
                     element.Fill = new SolidColorBrush(tempColor);
+                }
+            }
+        }
+
+        static public void SetWithColor(Color color)
+        {
+            foreach (var line in field)
+            {
+                foreach (var element in line)
+                {
+                    element.Stroke = new SolidColorBrush(color);
+                    element.Fill = new SolidColorBrush(color);
                 }
             }
         }

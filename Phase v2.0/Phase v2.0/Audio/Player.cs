@@ -95,9 +95,6 @@ namespace Phase_v2._0
                 player.Position = new TimeSpan(0, 0, 0, 0, (int)pauseTime);
                 player.Play();
 
-                //Console.WriteLine();
-                Analyzer.GetInfo(CurrentTrack.TrackUri.LocalPath);
-
                 //After ending next song will be playing
                 player.MediaEnded += Player_MediaEnded;
 
@@ -192,45 +189,45 @@ namespace Phase_v2._0
         }
 
         static public void Next()
-        {  
+        {
+            //Title
+            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Content = CurrentTrack.TrackTitle;
+            //Icon
+            ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
+
             PlayTrack(NextTrack);
 
             //Selection in playlist
             int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
             PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);
-
-            //Title
-            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Content = CurrentTrack.TrackTitle;
-            //Icon
-            ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
         }
 
         static public void Previous()
         {
+            //Title
+            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Content = CurrentTrack.TrackTitle;
+            //Icon
+            ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
+
             PlayTrack(PreviousTrack);
 
             //Selection in playlist
             int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
-            PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);
-
-            //Title
-            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Content = CurrentTrack.TrackTitle;
-            //Icon
-            ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
+            PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);       
         }
 
         static public void Current()
         {
-            PlayTrack(CurrentTrack);
-
-            //Selection in playlist
-            int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
-            PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);
-
             //Title
             ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Content = CurrentTrack.TrackTitle;
             //Icon
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
+
+            PlayTrack(CurrentTrack);
+
+            //Selection in playlist
+            int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
+            PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);  
         }
 
         static public void LoopOn()

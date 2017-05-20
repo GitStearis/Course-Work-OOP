@@ -270,10 +270,10 @@ namespace Phase_v2._0
                     {
                         Player.isPlaying = true;
 
-                        Player.PlayTrack(Player.CurrentPlaylist[DefaultPlaylistBox.Items.IndexOf(DefaultPlaylistBox.SelectedItem)]);
-
                         CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
                         PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
+
+                        Player.PlayTrack(Player.CurrentPlaylist[DefaultPlaylistBox.Items.IndexOf(DefaultPlaylistBox.SelectedItem)]);
 
                         break;
                     }
@@ -301,10 +301,11 @@ namespace Phase_v2._0
                     if (obj.GetType() == typeof(ListBoxItem))
                     {
                         Player.isPlaying = true;
-                        Player.PlayTrack(Player.CurrentPlaylist[CustomPlaylistBox.Items.IndexOf(CustomPlaylistBox.SelectedItem)]);
 
                         CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
                         PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
+
+                        Player.PlayTrack(Player.CurrentPlaylist[CustomPlaylistBox.Items.IndexOf(CustomPlaylistBox.SelectedItem)]);
 
                         break;
                     }

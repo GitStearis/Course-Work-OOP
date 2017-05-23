@@ -9,6 +9,7 @@
         ResizeMode="NoResize">
     <Window.Resources>
 
+        <!--STYLE-->
         <Style x:Key="CommonButton" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Template">
@@ -85,7 +86,62 @@
             </Style.Triggers>
         </Style>
 
+        <!--COMMANDS FOR BUTTON BINDINGS-->
+        <RoutedUICommand x:Key="LoopCommand"/>
+        <RoutedUICommand x:Key="ShuffleCommand"/>
+        <RoutedUICommand x:Key="PreviousTrackCommand"/>
+        <RoutedUICommand x:Key="PlayCommand"/>
+        <RoutedUICommand x:Key="NextTrackCommand"/>
+        <RoutedUICommand x:Key="MuteCommand"/>
+
+        <RoutedUICommand x:Key="SaveCommand"/>
+        <RoutedUICommand x:Key="OpenCommand"/>
+        <RoutedUICommand x:Key="AddCommand"/>
+        <RoutedUICommand x:Key="RemoveCommand"/>
+        <RoutedUICommand x:Key="ClearCommand"/>
+
     </Window.Resources>
+
+    <!--HOTKEYS DEFENITION-->
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource LoopCommand}"
+                    Executed="LoopButton_Click"/>
+        <CommandBinding Command="{StaticResource ShuffleCommand}"
+                    Executed="ShuffleButton_Click"/>
+        <CommandBinding Command="{StaticResource PreviousTrackCommand}"
+                    Executed="PreviousButton_Click"/>
+        <CommandBinding Command="{StaticResource PlayCommand}"
+                    Executed="PlayButton_Click"/>
+        <CommandBinding Command="{StaticResource NextTrackCommand}"
+                    Executed="NextButton_Click"/>
+        <CommandBinding Command="{StaticResource MuteCommand}"
+                    Executed="MuteButton_Click"/>
+
+        <CommandBinding Command="{StaticResource SaveCommand}"
+                    Executed="SaveCurrentPlaylistButton_Click"/>
+        <CommandBinding Command="{StaticResource OpenCommand}"
+                    Executed="LoadPlaylistButton_Click"/>
+        <CommandBinding Command="{StaticResource AddCommand}"
+                    Executed="AddTrackButton_Click"/>
+        <CommandBinding Command="{StaticResource RemoveCommand}"
+                    Executed="RemoveTrackButton_Click"/>
+        <CommandBinding Command="{StaticResource ClearCommand}"
+                    Executed="ClearCurrentPlaylistButton_Click"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding Source={StaticResource LoopCommand}}" Key="L" />
+        <KeyBinding Command="{Binding Source={StaticResource ShuffleCommand}}" Key="S" />
+        <KeyBinding Command="{Binding Source={StaticResource PreviousTrackCommand}}" Key="Left" />
+        <KeyBinding Command="{Binding Source={StaticResource PlayCommand}}" Key="Space" />
+        <KeyBinding Command="{Binding Source={StaticResource NextTrackCommand}}" Key="Right" />
+        <KeyBinding Command="{Binding Source={StaticResource MuteCommand}}" Key="M" />
+
+        <KeyBinding Command="{Binding Source={StaticResource SaveCommand}}" Gesture="Ctrl+S" />
+        <KeyBinding Command="{Binding Source={StaticResource OpenCommand}}" Gesture="Ctrl+O" />
+        <KeyBinding Command="{Binding Source={StaticResource AddCommand}}" Gesture="Ctrl+A" />
+        <KeyBinding Command="{Binding Source={StaticResource RemoveCommand}}" Gesture="Ctrl+R" />
+        <KeyBinding Command="{Binding Source={StaticResource ClearCommand}}" Gesture="Ctrl+E" />
+    </Window.InputBindings>
 
     <Grid x:Name="windowControlGrid">
 
@@ -209,7 +265,7 @@
                 Background="BurlyWood">
         </Canvas>
 
-        <Button Style="{StaticResource CommonButton}" x:Name="MinimizeButton" Click="MinimizeButton_Click" Margin="385,10,65,668" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+        <Button ToolTip="Minimize" Style="{StaticResource CommonButton}" x:Name="MinimizeButton" Click="MinimizeButton_Click" Margin="385,10,65,668" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Cursor="Hand">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\minimize.png"
@@ -219,7 +275,7 @@
             </StackPanel>
         </Button>
 
-        <Button Style="{StaticResource CommonButton}" x:Name="CloseButton" Click="CloseButton_Click" Margin="440,10,10,668" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Height="50">
+        <Button ToolTip="Close" Style="{StaticResource CommonButton}" x:Name="CloseButton" Click="CloseButton_Click" Margin="440,10,10,668" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Height="50" Cursor="Hand">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\close.png" 
@@ -229,7 +285,7 @@
             </StackPanel>
         </Button>
 
-        <Button Style="{StaticResource CommonButton}" x:Name="PreviousButton" Click="PreviousButton_Click" Margin="10,200,440,478" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+        <Button ToolTip="Previous track [Left Arrow]" Style="{StaticResource CommonButton}" x:Name="PreviousButton" Click="PreviousButton_Click" Margin="10,200,440,478" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Cursor="Hand">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\previous.png" 
@@ -239,7 +295,7 @@
             </StackPanel>
         </Button>
 
-        <Button Style="{StaticResource CommonButton}" x:Name="PlayButton" Click="PlayButton_Click" Margin="65,200,385,478" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+        <Button ToolTip="Play\Pause [Space]" Style="{StaticResource CommonButton}" x:Name="PlayButton" Click="PlayButton_Click" Margin="65,200,385,478" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Cursor="Hand">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Name="PlayIcon" Source="D:\Work\C#\Курсовой проект\Icons\play.png" 
@@ -249,7 +305,7 @@
             </StackPanel>
         </Button>
 
-        <Button Style="{StaticResource CommonButton}" x:Name="NextButton" Click="NextButton_Click" Margin="120,200,330,478" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+        <Button ToolTip="Next track [Right Arrow]" Style="{StaticResource CommonButton}" x:Name="NextButton" Click="NextButton_Click" Margin="120,200,330,478" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Cursor="Hand">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\next.png" 
@@ -259,7 +315,7 @@
             </StackPanel>
         </Button>
 
-        <Button Style="{StaticResource CommonButton}" x:Name="ShuffleButton" Click="ShuffleButton_Click" Margin="65,120,385,558" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+        <Button ToolTip="Shuffle on\off [S]" Style="{StaticResource CommonButton}" x:Name="ShuffleButton" Click="ShuffleButton_Click" Margin="10,65,440,613" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Cursor="Hand">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\shuffle.png" 
@@ -269,7 +325,7 @@
             </StackPanel>
         </Button>
 
-        <Button Style="{StaticResource CommonButton}" x:Name="LoopButton" Click="LoopButton_Click" Margin="10,120,440,558" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+        <Button ToolTip="Loop on\off [L]" Style="{StaticResource CommonButton}" x:Name="LoopButton" Click="LoopButton_Click" Margin="10,120,440,558" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Cursor="Hand">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\loop.png" 
@@ -279,7 +335,7 @@
             </StackPanel>
         </Button>
 
-        <Button Style="{StaticResource CommonButton}" x:Name="MenuButton" Click="MenuButton_Click" Margin="10,10,440,668" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" ContextMenuService.IsEnabled="False">
+        <Button ToolTip="Menu" Style="{StaticResource CommonButton}" x:Name="MenuButton" Click="MenuButton_Click" Margin="10,10,440,668" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" ContextMenuService.IsEnabled="False" Cursor="Hand">
             <Button.ContextMenu>
                 <ContextMenu Background="#99FFFFFF">
                     <ContextMenu.Style>
@@ -306,7 +362,19 @@
             </StackPanel>
         </Button>
 
-        <Button Style="{StaticResource CommonButton}" x:Name="PlaylistButton" Click="PlaylistButton_Click" Margin="440,200,10,478" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+        <Button ToolTip="Visualization Menu [V]" Style="{StaticResource CommonButton}" x:Name="VisualizationButton" Click="VisualizationButton_Click" Margin="440,200,10,478" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+            <Button.ContextMenu>
+                <ContextMenu Background="#99FFFFFF">
+                    <ContextMenu.Style>
+                        <Style TargetType="ContextMenu">
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="FontFamily" Value="Century Gothic"/>
+                            <Setter Property="Width" Value="160"/>
+                        </Style>
+                    </ContextMenu.Style>
+                    <Separator />
+                </ContextMenu>
+            </Button.ContextMenu>
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\playlist.png" 
@@ -316,22 +384,22 @@
             </StackPanel>
         </Button>
 
-        <Slider Style="{StaticResource Horizontal_Slider}" x:Name="TrackProgressSlider" Width="480" Height="20"
+        <Slider ToolTip="Track position slider [Drag to change]" Style="{StaticResource Horizontal_Slider}" x:Name="TrackProgressSlider" Width="480" Height="20"
                 Maximum="1000" Minimum="1" Value="0" TickFrequency="10"
                 TickPlacement="None" Margin="10,175,10,533" 
                 HorizontalContentAlignment="Center" HorizontalAlignment="Center" 
                 Background="#99FFFFFF"
                 Thumb.DragStarted="TrackProgressSlider_DragStarted"
-                Thumb.DragCompleted="TrackProgressSlider_DragCompleted"/>
+                Thumb.DragCompleted="TrackProgressSlider_DragCompleted" Cursor="Hand"/>
 
         <TabControl x:Name="PlaylistTabControl" Height="408" Margin="10,255,10,65" Width="480" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" VerticalAlignment="Center" Background="#99FFFFFF" BorderBrush="{x:Null}" BorderThickness="0" Padding="0">
-            <TabItem Style="{StaticResource Tab}" x:Name="DefaultPlaylistTab" Header="Default" Height="50" Width="237" Background="#99FFFFFF" BorderBrush="{x:Null}" Margin="-4,-10,0,0" IsSelected="True" FontFamily="Century Gothic" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" GotFocus="DefaultPlaylistTab_GotFocus">
+            <TabItem ToolTip="Default playlist" Style="{StaticResource Tab}" x:Name="DefaultPlaylistTab" Header="Default" Height="50" Width="237" Background="#99FFFFFF" BorderBrush="{x:Null}" Margin="-4,-10,0,0" IsSelected="True" FontFamily="Century Gothic" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" GotFocus="DefaultPlaylistTab_GotFocus">
                 <Grid>
                     <ListBox x:FieldModifier="public" Drop="DefaultPlaylistDrop" AllowDrop="true" x:Name="DefaultPlaylistBox" HorizontalAlignment="Left" Height="356" VerticalAlignment="Top" Width="480" BorderBrush="{x:Null}" Background="{x:Null}">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
                                 <Setter Property="Height" Value="40"/>
-                                <Setter Property="Width" Value="Auto"/>
+                                <Setter Property="Width" Value="470"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ListBoxItem">
@@ -357,13 +425,13 @@
                     </ListBox>
                 </Grid>
             </TabItem>
-            <TabItem Style="{StaticResource Tab}" x:Name="CustomPlaylistTab" Header="Custom" Height="50" Width="237" Background="#99FFFFFF" BorderBrush="{x:Null}" Margin="0,-10,-8,0" IsSelected="True" FontFamily="Century Gothic" GotFocus="CustomPlaylistTab_GotFocus">
+            <TabItem ToolTip="Custom playlist" Style="{StaticResource Tab}" x:Name="CustomPlaylistTab" Header="Custom" Height="50" Width="237" Background="#99FFFFFF" BorderBrush="{x:Null}" Margin="0,-10,-8,0" IsSelected="True" FontFamily="Century Gothic" GotFocus="CustomPlaylistTab_GotFocus">
                 <Grid>
                     <ListBox x:FieldModifier="public" Drop="CustomPlaylistDrop" AllowDrop="true" x:Name="CustomPlaylistBox" HorizontalAlignment="Left" Height="356" VerticalAlignment="Top" Width="480" BorderBrush="{x:Null}" Background="{x:Null}">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
                                 <Setter Property="Height" Value="40"/>
-                                <Setter Property="Width" Value="Auto"/>
+                                <Setter Property="Width" Value="470"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ListBoxItem">
@@ -391,7 +459,7 @@
             </TabItem>
         </TabControl>
 
-        <Button Style="{StaticResource CommonButton}" x:Name="SaveCurrentPlaylistButton" Click="SaveCurrentPlaylistButton_Click" Margin="10,668,440,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+        <Button ToolTip="Save current playlist [Ctrl+S]" Style="{StaticResource CommonButton}" x:Name="SaveCurrentPlaylistButton" Click="SaveCurrentPlaylistButton_Click" Margin="10,668,440,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Cursor="Hand">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\save.png" 
@@ -400,7 +468,7 @@
                 </Border>
             </StackPanel>
         </Button>
-        <Button Style="{StaticResource CommonButton}" x:Name="LoadPlaylistButton" Click="LoadPlaylistButton_Click" Margin="65,668,385,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+        <Button ToolTip="Open playlist [Ctrl+O]" Style="{StaticResource CommonButton}" x:Name="LoadPlaylistButton" Click="LoadPlaylistButton_Click" Margin="65,668,385,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Cursor="Hand">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\load.png" 
@@ -410,7 +478,7 @@
             </StackPanel>
         </Button>
 
-        <Button Style="{StaticResource CommonButton}" x:Name="AddTrackButton" Click="AddTrackButton_Click" Margin="330,668,120,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+        <Button ToolTip="Add track to playlist [Ctrl+A]" Style="{StaticResource CommonButton}" x:Name="AddTrackButton" Click="AddTrackButton_Click" Margin="330,668,120,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Cursor="Hand">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\plus.png" 
@@ -419,7 +487,7 @@
                 </Border>
             </StackPanel>
         </Button>
-        <Button Style="{StaticResource CommonButton}" x:Name="RemoveTrackButton" Click="RemoveTrackButton_Click" Margin="385,668,65,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+        <Button ToolTip="Removes selected track [Ctrl+R]" Style="{StaticResource CommonButton}" x:Name="RemoveTrackButton" Click="RemoveTrackButton_Click" Margin="385,668,65,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Cursor="Hand">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\minus.png" 
@@ -428,7 +496,7 @@
                 </Border>
             </StackPanel>
         </Button>
-        <Button Style="{StaticResource CommonButton}" x:Name="ClearCurrentPlaylistButton_Copy" Click="ClearCurrentPlaylistButton_Click" Margin="440,668,10,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+        <Button ToolTip="Clear current playlist [Ctrl+E]" Style="{StaticResource CommonButton}" x:Name="ClearCurrentPlaylistButton_Copy" Click="ClearCurrentPlaylistButton_Click" Margin="440,668,10,10" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Cursor="Hand">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\clear.png" 
@@ -438,17 +506,20 @@
             </StackPanel>
         </Button>
 
-        <Label x:Name="CurrentTrackLabel" Content="" HorizontalAlignment="Left" Margin="120,132,0,0" VerticalAlignment="Top" FontFamily="Century Gothic" FontSize="14"/>
+        <TextBlock ToolTip="Previous track:" x:Name="PreviousTrackLabel" HorizontalAlignment="Left" Margin="65,85,0,0" VerticalAlignment="Top" FontFamily="Century Gothic" FontSize="10" MaxWidth="315" TextTrimming="CharacterEllipsis"/>
+        <TextBlock ToolTip="Current track:" x:Name="CurrentTrackLabel" HorizontalAlignment="Left" Margin="65,107,0,0" VerticalAlignment="Top" FontFamily="Century Gothic" FontSize="14" MaxWidth="425" TextTrimming="CharacterEllipsis"/>
+        <TextBlock ToolTip="Next track:" x:Name="NextTrackLabel" HorizontalAlignment="Left" Margin="65,134,0,0" VerticalAlignment="Top" FontFamily="Century Gothic" FontSize="10" MaxWidth="315" TextTrimming="CharacterEllipsis"/>
+        <Label ToolTip="Current track time" x:Name="CurrentTimeLabel" Content="" Canvas.Left="385" Canvas.Top="67" Width="105" Height="39" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Century Gothic" FontSize="20" Background="#99FFFFFF" Margin="385,65,10,624" Cursor="Wait"/>
 
-        <Slider Style="{StaticResource Horizontal_Slider}" x:Name="VolumeLevelSlider" Width="150"
+        <Slider ToolTip="Volume level slider [Drag to change]" Style="{StaticResource Horizontal_Slider}" x:Name="VolumeLevelSlider" Width="150"
             Maximum="100" Minimum="1" Value="100" TickFrequency="1"
             TickPlacement="None" Margin="230,214,120,494" 
             HorizontalContentAlignment="Center" HorizontalAlignment="Center" 
             Background="#99FFFFFF"
             Thumb.DragCompleted="VolumeLevelSlider_DragCompleted"
-            IsMoveToPointEnabled="True"/>
+            IsMoveToPointEnabled="True" Cursor="Hand"/>
 
-        <Button Style="{StaticResource CommonButton}" x:Name="MuteButton" Click="MuteButton_Click" Margin="175,200,275,478" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center">
+        <Button ToolTip="Mute [M]" Style="{StaticResource CommonButton}" x:Name="MuteButton" Click="MuteButton_Click" Margin="175,200,275,478" BorderBrush="{x:Null}" Background="#99FFFFFF" Width="50" Height="50" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Cursor="Hand">
             <StackPanel Orientation="Horizontal">
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="D:\Work\C#\Курсовой проект\Icons\mute.png" 

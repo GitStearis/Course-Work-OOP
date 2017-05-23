@@ -12,8 +12,10 @@ namespace Phase_v2._0
     public partial class MainWindow : Window
     {
         public DispatcherTimer sliderTimer = new DispatcherTimer();
+        public DispatcherTimer labelTimer = new DispatcherTimer();
 
-        private bool isMenuOpened = false;
+        private bool isTopMenuOpened = false;
+        private bool isVisualizationMenuOpened = false;
         private bool isDraggingPosition;
         private bool isClickedPosition = false;
 
@@ -28,17 +30,33 @@ namespace Phase_v2._0
             sliderTimer.Interval = TimeSpan.FromMilliseconds(50);
             sliderTimer.Tick += new EventHandler(ChangeSliderPosition);
 
+            labelTimer.Interval = TimeSpan.FromMilliseconds(50);
+            labelTimer.Tick += new EventHandler(RedrawLabel);
+            labelTimer.Start();
+
             DefaultPlaylistBox.MouseDoubleClick += DefaultPlaylist_TrackDoubleClick;
             CustomPlaylistBox.MouseDoubleClick += CustomPlaylist_TrackDoubleClick;
 
             VolumeLevelSlider.ValueChanged += VolumeLevelSlider_Click;
-
             Player.SetVolumeLevel(1);
 
             Player.Load(PlaylistManager.GetActivePlaylist());
 
             CubesContainer.InitializeField(Pad);
             CubesContainer.SetRandomly();
+        }
+
+        private void RedrawLabel(object sender, EventArgs e)
+        {
+            string result = null;
+            string hour = Player.player.Position.Hours.ToString();
+            string minute = Player.player.Position.Minutes.ToString();
+            string second = Player.player.Position.Seconds.ToString();
+            string msecond = (Player.player.Position.Milliseconds % 10).ToString();
+
+            result = hour + ":" + minute + ":" + second + ":" + msecond;
+
+            CurrentTimeLabel.Content = result;
         }
 
         //WINDOW CONTROL BUTTONS
@@ -80,9 +98,11 @@ namespace Phase_v2._0
 
                         PlaylistManager.DrawSelection(PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack), selectedTab);
 
-                        CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
-                        PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
+                        PreviousTrackLabel.Text = Player.PreviousTrack.TrackTitle;
+                        CurrentTrackLabel.Text = Player.CurrentTrack.TrackTitle;
+                        NextTrackLabel.Text = Player.NextTrack.TrackTitle;
 
+                        PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
                         sliderTimer.Start();
                     }
@@ -141,21 +161,39 @@ namespace Phase_v2._0
             }
         }
 
-        //TOP MENU
-        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        //VISUALIZATION
+        private void VisualizationButton_Click(object sender, RoutedEventArgs e)
         {
-            if (isMenuOpened == false)
+            if (isVisualizationMenuOpened == false)
             {
                 (sender as Button).ContextMenu.IsEnabled = true;
                 (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
                 (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
                 (sender as Button).ContextMenu.IsOpen = true;
-                isMenuOpened = true;
+                isVisualizationMenuOpened = true;
             }
             else
             {
                 (sender as Button).ContextMenu.IsOpen = false;
-                isMenuOpened = false;
+                isVisualizationMenuOpened = false;
+            }
+        }
+
+        //TOP MENU
+        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (isTopMenuOpened == false)
+            {
+                (sender as Button).ContextMenu.IsEnabled = true;
+                (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
+                (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                (sender as Button).ContextMenu.IsOpen = true;
+                isTopMenuOpened = true;
+            }
+            else
+            {
+                (sender as Button).ContextMenu.IsOpen = false;
+                isTopMenuOpened = false;
             }
         }
 
@@ -191,7 +229,7 @@ namespace Phase_v2._0
             {
                 (sender as Button).ContextMenu.IsOpen = false;
             }
-            isMenuOpened = false;
+            isTopMenuOpened = false;
         }
 
         private void OpenPlaylist_Click(object sender, RoutedEventArgs e)
@@ -203,19 +241,13 @@ namespace Phase_v2._0
             {
                 (sender as Button).ContextMenu.IsOpen = false;
             }
-            isMenuOpened = false;
+            isTopMenuOpened = false;
         }
 
         private void SavePlaylistAs_Click(object sender, RoutedEventArgs e)
         {
             PlaylistManager.SaveSelectedPlaylist(selectedTab);
         }
-
-        private void PlaylistButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
 
         //PLAYLIST SECTION
         private void DefaultPlaylistTab_GotFocus(object sender, RoutedEventArgs e)
@@ -270,7 +302,10 @@ namespace Phase_v2._0
                     {
                         Player.isPlaying = true;
 
-                        CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
+                        PreviousTrackLabel.Text = Player.PreviousTrack.TrackTitle;
+                        CurrentTrackLabel.Text = Player.CurrentTrack.TrackTitle;
+                        NextTrackLabel.Text = Player.NextTrack.TrackTitle;
+
                         PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
                         Player.PlayTrack(Player.CurrentPlaylist[DefaultPlaylistBox.Items.IndexOf(DefaultPlaylistBox.SelectedItem)]);
@@ -302,7 +337,10 @@ namespace Phase_v2._0
                     {
                         Player.isPlaying = true;
 
-                        CurrentTrackLabel.Content = Player.CurrentTrack.TrackTitle;
+                        PreviousTrackLabel.Text = Player.PreviousTrack.TrackTitle;
+                        CurrentTrackLabel.Text = Player.CurrentTrack.TrackTitle;
+                        NextTrackLabel.Text = Player.NextTrack.TrackTitle;
+
                         PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
                         Player.PlayTrack(Player.CurrentPlaylist[CustomPlaylistBox.Items.IndexOf(CustomPlaylistBox.SelectedItem)]);

@@ -23,10 +23,10 @@ namespace Phase_v2._0
             filepath = path;
 
             visualizationTimer = new DispatcherTimer();
-            visualizationTimer.Interval = TimeSpan.FromMilliseconds(100);
+            visualizationTimer.Interval = TimeSpan.FromMilliseconds(500);
 
             visualizationTimer.Tick += new EventHandler(DrawWave);
-            //visualizationTimer.Tick += new EventHandler(DrawBeats);
+            //visualizationTimer.Tick += new EventHandler(DrawMesh);
 
             visualizationTimer.Start();          
         }
@@ -34,13 +34,13 @@ namespace Phase_v2._0
         static public void PauseCurrentVisualization()
         {
             visualizationTimer.Tick -= new EventHandler(DrawWave);
-            //visualizationTimer.Tick -= new EventHandler(DrawBeats);
+            //visualizationTimer.Tick -= new EventHandler(DrawMesh);
         }
 
         static public void StopVisualizaton()
         {
             visualizationTimer.Tick -= new EventHandler(DrawWave);
-            //visualizationTimer.Tick -= new EventHandler(DrawBeats);
+            //visualizationTimer.Tick -= new EventHandler(DrawMesh);
             visualizationTimer.Stop();
         }
 
@@ -84,7 +84,7 @@ namespace Phase_v2._0
                 frame = reader.ReadNextFrame();
             }
 
-            for (int i = 0; i < currentByte % 12; i++)
+            for (int i = 0; i < currentByte / 16; i++)
             {
                 CubesContainer.SetCube(shift, i, GenerateColor(shift));
                 CubesContainer.SetCube(shift, CubesContainer.maxCubesY - 1 - i, GenerateColor(shift));

@@ -153,9 +153,10 @@ namespace Phase_v2._0
                     }
                 }
 
-                Console.WriteLine(PreviousTrack.TrackTitle);
-                Console.WriteLine(CurrentTrack.TrackTitle);
-                Console.WriteLine(NextTrack.TrackTitle + "\n");
+            //Title
+            ((MainWindow)System.Windows.Application.Current.MainWindow).PreviousTrackLabel.Text = PreviousTrack.TrackTitle;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Text = CurrentTrack.TrackTitle;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).NextTrackLabel.Text = NextTrack.TrackTitle;
 
                 StartPlaying();
             }
@@ -182,7 +183,9 @@ namespace Phase_v2._0
 
             ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Stop();
             ((MainWindow)System.Windows.Application.Current.MainWindow).TrackProgressSlider.Value = 0;
-            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Content = null;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).PreviousTrackLabel.Text = null;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Text = null;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).NextTrackLabel.Text = null;
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/play.png", UriKind.RelativeOrAbsolute));
 
             Visualizer.StopVisualizaton();
@@ -190,8 +193,6 @@ namespace Phase_v2._0
 
         static public void Next()
         {
-            //Title
-            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Content = CurrentTrack.TrackTitle;
             //Icon
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
@@ -204,8 +205,7 @@ namespace Phase_v2._0
 
         static public void Previous()
         {
-            //Title
-            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Content = CurrentTrack.TrackTitle;
+
             //Icon
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
@@ -218,8 +218,6 @@ namespace Phase_v2._0
 
         static public void Current()
         {
-            //Title
-            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Content = CurrentTrack.TrackTitle;
             //Icon
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 

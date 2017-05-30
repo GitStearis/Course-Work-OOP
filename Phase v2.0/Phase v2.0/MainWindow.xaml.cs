@@ -27,10 +27,12 @@ namespace Phase_v2._0
         {
             InitializeComponent();
 
+            Restorer.LoadLastSession();
+
             sliderTimer.Interval = TimeSpan.FromMilliseconds(50);
             sliderTimer.Tick += new EventHandler(ChangeSliderPosition);
 
-            labelTimer.Interval = TimeSpan.FromMilliseconds(50);
+            labelTimer.Interval = TimeSpan.FromMilliseconds(500);
             labelTimer.Tick += new EventHandler(RedrawLabel);
             labelTimer.Start();
 
@@ -52,9 +54,8 @@ namespace Phase_v2._0
             string hour = Player.player.Position.Hours.ToString();
             string minute = Player.player.Position.Minutes.ToString();
             string second = Player.player.Position.Seconds.ToString();
-            string msecond = (Player.player.Position.Milliseconds % 10).ToString();
 
-            result = hour + ":" + minute + ":" + second + ":" + msecond;
+            result = hour + ":" + minute + ":" + second;
 
             CurrentTimeLabel.Content = result;
         }
@@ -66,6 +67,7 @@ namespace Phase_v2._0
         }
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            Restorer.SaveCurrentSession();
             Close();
         }
 
@@ -92,29 +94,11 @@ namespace Phase_v2._0
                 {
                     if (Player.isPlaying == false)
                     {
-                        Player.isPlaying = true;
-
-                        Player.StartPlaying();
-
-                        PlaylistManager.DrawSelection(PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack), selectedTab);
-
-                        PreviousTrackLabel.Text = Player.PreviousTrack.TrackTitle;
-                        CurrentTrackLabel.Text = Player.CurrentTrack.TrackTitle;
-                        NextTrackLabel.Text = Player.NextTrack.TrackTitle;
-
-                        PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
-
-                        sliderTimer.Start();
+                        Player.Continue();
                     }
                     else
                     {
-                        Player.isPlaying = false;
-
                         Player.Pause();
-
-                        PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/play.png", UriKind.RelativeOrAbsolute));
-
-                        sliderTimer.Stop();
                     }
                 }
             }
@@ -234,7 +218,7 @@ namespace Phase_v2._0
 
         private void OpenPlaylist_Click(object sender, RoutedEventArgs e)
         {
-            PlaylistManager.OpenPlaylist();
+            PlaylistManager.OpenPlaylistDialog();
 
             //Close menu
             if ((sender as Button) != null)
@@ -433,7 +417,7 @@ namespace Phase_v2._0
 
         private void LoadPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
-            PlaylistManager.OpenPlaylist();
+            PlaylistManager.OpenPlaylistDialog();
         }
 
 

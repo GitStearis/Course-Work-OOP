@@ -15,6 +15,8 @@ namespace Phase_v2._0
         static public Playlist defaultPlaylist = new Playlist();
         static public Playlist customPlaylist = new Playlist();
 
+        static public string lastLoadedPlaylist;
+
         //TRUE - for default
         //FALSE - for custom
         static public bool activePlaylist = true;
@@ -78,9 +80,6 @@ namespace Phase_v2._0
 
         static public void RemoveTrack(bool selectedTab, Track track)
         {
-            Console.WriteLine("Selected tab = " + selectedTab);
-            Console.WriteLine("Active playlist = " + activePlaylist);
-
             Track tempCurrentTrack = Player.CurrentTrack;
 
             if (selectedTab == activePlaylist)
@@ -145,6 +144,10 @@ namespace Phase_v2._0
 
                 }
             }
+
+            ((MainWindow)System.Windows.Application.Current.MainWindow).PreviousTrackLabel.Text = Player.PreviousTrack.TrackTitle;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Text = Player.CurrentTrack.TrackTitle;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).NextTrackLabel.Text = Player.NextTrack.TrackTitle;
         }
 
         static public Playlist GetActivePlaylist()
@@ -212,7 +215,7 @@ namespace Phase_v2._0
           
         }
 
-        static public void OpenPlaylist()
+        static public void OpenPlaylistDialog()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.DefaultExt = "pl";
@@ -224,22 +227,27 @@ namespace Phase_v2._0
 
             if (openFileDialog.ShowDialog() == true)
             {
-                ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistTab.Focus();
-
-                Playlist openedPlaylist = Load(openFileDialog.FileName);
-
-                //Stop and clear
-                Player.Stop();
-                defaultPlaylist.Tracklist.Clear();
-                ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Clear();
-
-                //Add to the player and playlist tab
-                activePlaylist = true;
-                AddTracks(openedPlaylist.ToStringArray());
-                defaultPlaylist = openedPlaylist;
-                Player.Load(defaultPlaylist);
+                LoadPlaylist(openFileDialog.FileName);
             }
+        }
 
+        static public void LoadPlaylist(string filepath)
+        {
+            ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistTab.Focus();
+
+            lastLoadedPlaylist = filepath;
+            Playlist openedPlaylist = Load(lastLoadedPlaylist);
+
+            //Stop and clear
+            Player.Stop();
+            defaultPlaylist.Tracklist.Clear();
+            ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Clear();
+
+            //Add to the player and playlist tab
+            activePlaylist = true;
+            AddTracks(openedPlaylist.ToStringArray());
+            defaultPlaylist = openedPlaylist;
+            Player.Load(defaultPlaylist);
         }
 
         static private Playlist Load(string path)

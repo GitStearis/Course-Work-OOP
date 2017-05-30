@@ -14,7 +14,6 @@ D:\Work\C#\Курсовой проект\Phase v2.0\Phase v2.0\obj\Debug\Phase v
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\bin\Debug\Phase v2.0.exe.config
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\bin\Debug\Phase v2.0.exe
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\bin\Debug\Phase v2.0.pdb
-D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.csprojResolveAssemblyReference.cache
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\MainWindow.baml
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\MainWindow.g.cs
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\App.g.cs
@@ -25,3 +24,4 @@ D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.csproj.Gene
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.exe
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.pdb
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\bin\Debug\NAudio.dll
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.csprojResolveAssemblyReference.cache

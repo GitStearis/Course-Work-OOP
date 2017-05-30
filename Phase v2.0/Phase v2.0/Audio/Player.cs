@@ -140,7 +140,7 @@ namespace Phase_v2._0
 
                     else
                     {
-                        if (CurrentTrack == CurrentPlaylist.First())
+                        if (CurrentTrack.TrackUri == CurrentPlaylist.First().TrackUri)
                         {
                             PreviousTrack = CurrentPlaylist.Last();
                             NextTrack = CurrentPlaylist[CurrentPlaylist.IndexOf(CurrentTrack) + 1];
@@ -153,10 +153,10 @@ namespace Phase_v2._0
                     }
                 }
 
-            //Title
-            ((MainWindow)System.Windows.Application.Current.MainWindow).PreviousTrackLabel.Text = PreviousTrack.TrackTitle;
-            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Text = CurrentTrack.TrackTitle;
-            ((MainWindow)System.Windows.Application.Current.MainWindow).NextTrackLabel.Text = NextTrack.TrackTitle;
+                //Title
+                ((MainWindow)System.Windows.Application.Current.MainWindow).PreviousTrackLabel.Text = PreviousTrack.TrackTitle;
+                ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Text = CurrentTrack.TrackTitle;
+                ((MainWindow)System.Windows.Application.Current.MainWindow).NextTrackLabel.Text = NextTrack.TrackTitle;
 
                 StartPlaying();
             }
@@ -164,10 +164,34 @@ namespace Phase_v2._0
 
         static public void Pause()
         {
+            isPlaying = false;
+
             pauseTime = player.Position.TotalMilliseconds;
             player.Pause();
 
+            ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/play.png", UriKind.RelativeOrAbsolute));
+            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Stop();
+            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Stop();
+
             Visualizer.PauseCurrentVisualization();
+        }
+
+        static public void Continue()
+        {
+            bool selectedTab = ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab;
+            isPlaying = true;
+
+            StartPlaying();
+
+            PlaylistManager.DrawSelection(PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack), selectedTab);
+
+            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Start();
+            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Start();
+            ((MainWindow)System.Windows.Application.Current.MainWindow).PreviousTrackLabel.Text = PreviousTrack.TrackTitle;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Text = CurrentTrack.TrackTitle;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).NextTrackLabel.Text = NextTrack.TrackTitle;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
+
         }
 
         static public void Stop()
@@ -181,6 +205,7 @@ namespace Phase_v2._0
             CurrentTrack = new Track();
             NextTrack = new Track();
 
+            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Stop();
             ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Stop();
             ((MainWindow)System.Windows.Application.Current.MainWindow).TrackProgressSlider.Value = 0;
             ((MainWindow)System.Windows.Application.Current.MainWindow).PreviousTrackLabel.Text = null;
@@ -193,18 +218,24 @@ namespace Phase_v2._0
 
         static public void Next()
         {
+            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Stop();
+
             //Icon
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
+            Console.WriteLine("########" + NextTrack);
             PlayTrack(NextTrack);
 
             //Selection in playlist
             int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
             PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);
+
+            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Start();
         }
 
         static public void Previous()
         {
+            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Stop();
 
             //Icon
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
@@ -213,11 +244,15 @@ namespace Phase_v2._0
 
             //Selection in playlist
             int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
-            PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);       
+            PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);
+
+            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Start();
         }
 
         static public void Current()
         {
+            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Stop();
+
             //Icon
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
@@ -225,7 +260,9 @@ namespace Phase_v2._0
 
             //Selection in playlist
             int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
-            PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);  
+            PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);
+
+            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Start();
         }
 
         static public void LoopOn()

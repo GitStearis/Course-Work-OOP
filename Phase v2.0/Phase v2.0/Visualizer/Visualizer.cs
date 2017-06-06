@@ -19,6 +19,7 @@ namespace Phase_v2._0
         {
             if (mode != 0)
             {
+                //Reading mp3 file
                 if (path != filepath)
                 {
                     reader = new Mp3FileReader(path);
@@ -99,7 +100,9 @@ namespace Phase_v2._0
 
         static private Color GenerateColor(int shift)
         {
+            //Index - current second of playing track
             int index = Player.player.Position.Seconds;
+            //Constant - hashcode of a name of a track
             int constant = 0;
             if (Player.CurrentTrack != null)
             {
@@ -108,17 +111,21 @@ namespace Phase_v2._0
             else
             {
                 constant = 0;
-            }
-                
+            }          
 
-            if (frame.RawData[index + shift] == 0 || frame.RawData[index + shift] == 85)//IDK why 85
+            //If current frame is empty, next one will be read
+            if (frame.RawData[index + shift] == 0 || frame.RawData[index + shift] == 85)
             {
                 frame = reader.ReadNextFrame();
             }
 
+            //Color calculating
+            byte bitRateVar = (byte)(frame.BitRateIndex % 128);
+            byte sampleRateVar = (byte)(frame.SampleRate % 255);
+
             byte r = (byte)(constant + frame.RawData[index + shift]);
-            byte g = (byte)(constant + frame.RawData[index + shift] * frame.BitRateIndex);
-            byte b = (byte)(frame.RawData[index + shift] ^ frame.SampleRate);
+            byte g = (byte)(constant + frame.RawData[index + shift] * bitRateVar);
+            byte b = (byte)(frame.RawData[index + shift] ^ sampleRateVar);
             byte a = (byte)(Player.player.Volume * 50 + 50);
 
             Color color = new Color()

@@ -7,8 +7,10 @@ namespace Phase_v2._0
 {
     static class Player
     {
+        //IMPORTANT!
         public static MediaPlayer player = new MediaPlayer();
 
+        //Playlists
         private static Playlist currentPlaylist = new Playlist();
         internal static Playlist CurrentPlaylist { get => currentPlaylist; set => currentPlaylist = value; }
         private static Playlist shuffledPlaylist = new Playlist();
@@ -16,6 +18,7 @@ namespace Phase_v2._0
         private static Playlist primaryPlaylist = new Playlist();
         internal static Playlist PrimaryPlaylist { get => primaryPlaylist; set => primaryPlaylist = value; }
 
+        //Triple-track section
         private static Track previousTrack;
         public static Track PreviousTrack { get => previousTrack; set => previousTrack = value; }
         private static Track currentTrack;
@@ -23,11 +26,12 @@ namespace Phase_v2._0
         private static Track nextTrack;
         public static Track NextTrack { get => nextTrack; set => nextTrack = value; }
 
-
+        //Variables
         public static double pauseTime;
         public static double totalTime = 0;
         public static double currentVolume;
 
+        //Flags
         public static bool isPlaying = false;
         public static bool isLooped = false;
         public static bool isShuffled = false;
@@ -125,6 +129,10 @@ namespace Phase_v2._0
         {
             if (CurrentPlaylist != null)
             {
+                //Slider stop
+                ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Stop();
+                ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Stop();
+
                 CurrentTrack = track;
                 pauseTime = 0;
 
@@ -157,6 +165,10 @@ namespace Phase_v2._0
                 ((MainWindow)System.Windows.Application.Current.MainWindow).NextTrackLabel.Text = NextTrack.TrackTitle;
 
                 StartPlaying();
+
+                //Slider start
+                ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Start();
+                ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Start();
             }
         }
 
@@ -183,8 +195,6 @@ namespace Phase_v2._0
 
             PlaylistManager.DrawSelection(PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack), selectedTab);
 
-            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Start();
-            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Start();
             ((MainWindow)System.Windows.Application.Current.MainWindow).PreviousTrackLabel.Text = PreviousTrack.TrackTitle;
             ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Text = CurrentTrack.TrackTitle;
             ((MainWindow)System.Windows.Application.Current.MainWindow).NextTrackLabel.Text = NextTrack.TrackTitle;
@@ -217,9 +227,6 @@ namespace Phase_v2._0
 
         static public void Next()
         {
-            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Stop();
-            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Stop();
-
             //Icon
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
@@ -228,16 +235,10 @@ namespace Phase_v2._0
             //Selection in playlist
             int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
             PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);
-
-            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Start();
-            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Start();
         }
 
         static public void Previous()
         {
-            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Stop();
-            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Stop();
-
             //Icon
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
@@ -246,16 +247,10 @@ namespace Phase_v2._0
             //Selection in playlist
             int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
             PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);
-
-            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Start();
-            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Start();
         }
 
         static public void Current()
         {
-            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Stop();
-            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Stop();
-
             //Icon
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
@@ -264,9 +259,6 @@ namespace Phase_v2._0
             //Selection in playlist
             int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
             PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);
-
-            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Start();
-            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Start();
         }
 
         static public void LoopOn()

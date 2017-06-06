@@ -515,7 +515,7 @@
         <TextBlock ToolTip="Previous track:" x:Name="PreviousTrackLabel" HorizontalAlignment="Left" Margin="65,85,0,0" VerticalAlignment="Top" FontFamily="Century Gothic" FontSize="10" MaxWidth="315" TextTrimming="CharacterEllipsis"/>
         <TextBlock ToolTip="Current track:" x:Name="CurrentTrackLabel" HorizontalAlignment="Left" Margin="65,107,0,0" VerticalAlignment="Top" FontFamily="Century Gothic" FontSize="14" MaxWidth="425" TextTrimming="CharacterEllipsis"/>
         <TextBlock ToolTip="Next track:" x:Name="NextTrackLabel" HorizontalAlignment="Left" Margin="65,134,0,0" VerticalAlignment="Top" FontFamily="Century Gothic" FontSize="10" MaxWidth="315" TextTrimming="CharacterEllipsis"/>
-        <Label ToolTip="Current track time" x:Name="CurrentTimeLabel" Content="" Canvas.Left="385" Canvas.Top="67" Width="105" Height="39" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Century Gothic" FontSize="20" Background="#99FFFFFF" Margin="385,65,10,624" Cursor="Wait"/>
+        <Label ToolTip="Current track time" x:Name="CurrentTimeLabel" Content="" Canvas.Left="385" Canvas.Top="67" Width="105" Height="39" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Century Gothic" FontSize="20" Background="#99FFFFFF" Margin="385,65,10,624" Cursor="Hand"/>
 
         <Slider ToolTip="Volume level slider [Drag to change]" Style="{StaticResource Horizontal_Slider}" x:Name="VolumeLevelSlider" Width="150"
             Maximum="100" Minimum="1" Value="100" TickFrequency="1"

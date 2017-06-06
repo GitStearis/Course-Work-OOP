@@ -60,8 +60,6 @@ namespace Phase_v2._0
                     pad.Children.Add(element);
                 }
             }
-
-            Console.WriteLine("List of cubes has been successfully added to canvas!");
         }
 
         static public void SetCube(int xIndex, int yIndex, Color col)

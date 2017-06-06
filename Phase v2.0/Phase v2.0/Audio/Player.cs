@@ -84,9 +84,7 @@ namespace Phase_v2._0
         {
             if (CurrentPlaylist.Tracklist.Count > 0)
             {
-                Console.WriteLine(PreviousTrack.TrackTitle);
-                Console.WriteLine(CurrentTrack.TrackTitle);
-                Console.WriteLine(NextTrack.TrackTitle + "\n");
+                Visualizer.StopVisualizaton();
 
                 player.MediaOpened += new EventHandler(player_MediaOpened);
 
@@ -98,7 +96,7 @@ namespace Phase_v2._0
                 //After ending next song will be playing
                 player.MediaEnded += Player_MediaEnded;
 
-                Visualizer.StartVisualization(CurrentTrack.TrackUri.LocalPath);
+                Visualizer.StartVisualization(CurrentTrack.TrackUri.LocalPath, ((MainWindow)System.Windows.Application.Current.MainWindow).mode);
             }
         }
 
@@ -211,6 +209,7 @@ namespace Phase_v2._0
             ((MainWindow)System.Windows.Application.Current.MainWindow).PreviousTrackLabel.Text = null;
             ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTrackLabel.Text = null;
             ((MainWindow)System.Windows.Application.Current.MainWindow).NextTrackLabel.Text = null;
+            ((MainWindow)System.Windows.Application.Current.MainWindow).CurrentTimeLabel.Content = "0:0:0";
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/play.png", UriKind.RelativeOrAbsolute));
 
             Visualizer.StopVisualizaton();
@@ -219,23 +218,25 @@ namespace Phase_v2._0
         static public void Next()
         {
             ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Stop();
+            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Stop();
 
             //Icon
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
-            Console.WriteLine("########" + NextTrack);
             PlayTrack(NextTrack);
 
             //Selection in playlist
             int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
             PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);
 
+            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Start();
             ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Start();
         }
 
         static public void Previous()
         {
             ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Stop();
+            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Stop();
 
             //Icon
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
@@ -246,12 +247,14 @@ namespace Phase_v2._0
             int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
             PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);
 
+            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Start();
             ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Start();
         }
 
         static public void Current()
         {
             ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Stop();
+            ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Stop();
 
             //Icon
             ((MainWindow)System.Windows.Application.Current.MainWindow).PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
@@ -262,6 +265,7 @@ namespace Phase_v2._0
             int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(CurrentTrack);
             PlaylistManager.DrawSelection(index, ((MainWindow)System.Windows.Application.Current.MainWindow).selectedTab);
 
+            ((MainWindow)System.Windows.Application.Current.MainWindow).sliderTimer.Start();
             ((MainWindow)System.Windows.Application.Current.MainWindow).labelTimer.Start();
         }
 
@@ -303,8 +307,6 @@ namespace Phase_v2._0
         static public void MuteOn()
         {
             isMuted = true;
-
-            Console.WriteLine(player.Volume);
 
             currentVolume = player.Volume;
             player.Volume = 0;

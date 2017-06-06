@@ -60,7 +60,6 @@ namespace Phase_v2._0
             {
                 foreach (var file in paths)
                 {
-                    Console.WriteLine("Added " + file + " to default");
                     Track temp = new Track(file);
                     defaultPlaylist.Tracklist.Add(temp);
                     ((MainWindow)System.Windows.Application.Current.MainWindow).DefaultPlaylistBox.Items.Add(temp);
@@ -70,7 +69,6 @@ namespace Phase_v2._0
             {
                 foreach (var file in paths)
                 {
-                    Console.WriteLine("Added " + file + "to custom");
                     Track temp = new Track(file);
                     customPlaylist.Tracklist.Add(temp);
                     ((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.Items.Add(temp);
@@ -98,9 +96,19 @@ namespace Phase_v2._0
                         ((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.Items.Remove(((MainWindow)System.Windows.Application.Current.MainWindow).CustomPlaylistBox.SelectedItem);
                     }
 
-
                     Player.CurrentPlaylist.Tracklist.Remove(track);
-                    Player.Reload();
+
+                    if (track == tempCurrentTrack)
+                    {
+                        if (Player.isPlaying == true)
+                        {
+                            Player.Next();
+                        }
+                        else
+                        {
+                            Player.Reload();
+                        }
+                    }                  
                 }
                 else
                 {
@@ -278,7 +286,10 @@ namespace Phase_v2._0
 
         static public void Clear(bool selectedTab)
         {
-            Player.Stop();
+            if (selectedTab == activePlaylist)
+            {
+                Player.Stop();
+            }
 
             if (selectedTab == true)
             {

@@ -13,41 +13,103 @@ namespace Phase_v2._0
         static private string filepath = "";
         static private Mp3Frame frame;
 
-        static public void StartVisualization(string path)
-        {        
-            if (path != filepath)
+        static public event EventHandler visualizationMode;
+
+        static public void StartVisualization(string path, int mode)
+        {
+            if (mode != 0)
             {
-                reader = new Mp3FileReader(path);
-                frame = reader.ReadNextFrame();
+                if (path != filepath)
+                {
+                    reader = new Mp3FileReader(path);
+                    frame = reader.ReadNextFrame();
+                }
+                filepath = path;
+
+                visualizationTimer = new DispatcherTimer();
+                visualizationTimer.Interval = TimeSpan.FromMilliseconds(500);
+
+                ChoseVisualizationMode(mode);
+
+                visualizationTimer.Start();
+            }     
+        }
+
+        static public void ChoseVisualizationMode(int mode)
+        {
+            if (frame != null)
+            {
+                switch (mode)
+                {
+                    case 0:
+                        {
+                            StopVisualizaton();
+                        };
+                        break;
+                    case 1:
+                        {
+                            StopVisualizaton();
+                            visualizationMode = new EventHandler(DrawHeight);
+                            ContinueCurrentVisualization();
+                        }; break;
+                    case 2:
+                        {
+                            StopVisualizaton();
+                            visualizationMode = new EventHandler(DrawLength);
+                            ContinueCurrentVisualization();
+                        }; break;
+                    case 3:
+                        {
+                            StopVisualizaton();
+                            visualizationMode = new EventHandler(DrawMesh);
+                            ContinueCurrentVisualization();
+                        }; break;
+                    case 4:
+                        {
+                            StopVisualizaton();
+                            visualizationMode = new EventHandler(DrawWave);
+                            ContinueCurrentVisualization();
+                        }; break;
+                    default:
+                        {
+                            StopVisualizaton();
+                            visualizationMode = new EventHandler(DrawLength);
+                            ContinueCurrentVisualization();
+                        }; break;
+                }
             }
-            filepath = path;
-
-            visualizationTimer = new DispatcherTimer();
-            visualizationTimer.Interval = TimeSpan.FromMilliseconds(500);
-
-            visualizationTimer.Tick += new EventHandler(DrawWave);
-            //visualizationTimer.Tick += new EventHandler(DrawMesh);
-
-            visualizationTimer.Start();          
         }
 
         static public void PauseCurrentVisualization()
         {
-            visualizationTimer.Tick -= new EventHandler(DrawWave);
-            //visualizationTimer.Tick -= new EventHandler(DrawMesh);
+            visualizationTimer.Tick -= visualizationMode;
+        }
+
+        static public void ContinueCurrentVisualization()
+        {
+            visualizationTimer.Tick += visualizationMode;
+            visualizationTimer.Start();
         }
 
         static public void StopVisualizaton()
         {
-            visualizationTimer.Tick -= new EventHandler(DrawWave);
-            //visualizationTimer.Tick -= new EventHandler(DrawMesh);
+            visualizationTimer.Tick -= visualizationMode;
             visualizationTimer.Stop();
         }
 
         static private Color GenerateColor(int shift)
         {
             int index = Player.player.Position.Seconds;
-            int constant = Player.CurrentTrack.GetHashCode() % 100;
+            int constant = 0;
+            if (Player.CurrentTrack != null)
+            {
+                constant = Player.CurrentTrack.GetHashCode() % 100;
+            }
+            else
+            {
+                constant = 0;
+            }
+                
 
             if (frame.RawData[index + shift] == 0 || frame.RawData[index + shift] == 85)//IDK why 85
             {
@@ -56,11 +118,8 @@ namespace Phase_v2._0
 
             byte r = (byte)(constant + frame.RawData[index + shift]);
             byte g = (byte)(constant + frame.RawData[index + shift] * frame.BitRateIndex);
-            byte b = (byte)(constant + frame.RawData[index + shift] ^ frame.SampleRate);
+            byte b = (byte)(frame.RawData[index + shift] ^ frame.SampleRate);
             byte a = (byte)(Player.player.Volume * 50 + 50);
-
-            //Console.WriteLine("Const: " + constant + " Frame: " + frame.RawData[index + shift]);
-            //Console.WriteLine("R: " + r + " G: " + g + " B: " + b + " A: " + a);
 
             Color color = new Color()
             {

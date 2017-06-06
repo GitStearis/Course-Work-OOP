@@ -1,0 +1,14 @@
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\bin\Release\Phase v2.0.exe.config
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\bin\Release\Phase v2.0.exe
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\bin\Release\Phase v2.0.pdb
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\bin\Release\NAudio.dll
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Release\Phase v2.0.csprojResolveAssemblyReference.cache
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Release\MainWindow.baml
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Release\MainWindow.g.cs
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Release\App.g.cs
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Release\Phase v2.0_MarkupCompile.cache
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Release\Phase v2.0.g.resources
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Release\Phase_v2._0.Properties.Resources.resources
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Release\Phase v2.0.csproj.GenerateResource.Cache
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Release\Phase v2.0.exe
+D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Release\Phase v2.0.pdb

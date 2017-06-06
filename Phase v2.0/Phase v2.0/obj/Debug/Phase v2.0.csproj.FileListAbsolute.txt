@@ -24,4 +24,3 @@ D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.csproj.Gene
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.exe
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.pdb
 D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\bin\Debug\NAudio.dll
-D:\GitHub\Course-Work-OOP\Phase v2.0\Phase v2.0\obj\Debug\Phase v2.0.csprojResolveAssemblyReference.cache

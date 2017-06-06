@@ -66,11 +66,6 @@ namespace Phase_v2._0
                 double volumeLevel = Double.Parse(info.Element("VolumeLevel").Value);
                 double playerPosition = Double.Parse(info.Element("PlayerPosition").Value);
 
-                Console.WriteLine(defaultPlaylistPath);
-                Console.WriteLine(playedTrack);
-                Console.WriteLine(volumeLevel);
-                Console.WriteLine(playerPosition);
-
                 if (defaultPlaylistPath != null)
                 {
                     PlaylistManager.LoadPlaylist(defaultPlaylistPath);
@@ -81,6 +76,9 @@ namespace Phase_v2._0
                     Player.CurrentTrack = Player.CurrentPlaylist[playedTrack];
                     //TODO: RESTORE LAST PLAYED TRACK
                 }
+
+                Player.player.Volume = volumeLevel;
+                ((MainWindow)System.Windows.Application.Current.MainWindow).VolumeLevelSlider.Value = (volumeLevel * 100);
 
             }
             catch (Exception error)

@@ -19,45 +19,63 @@ namespace Phase_v2._0
         private bool isDraggingPosition;
         private bool isClickedPosition = false;
 
+        //4 - Wave visualization
+        public int mode = 4;
+
         //TRUE - for default
         //FALSE - for custom
         public bool selectedTab = true;
 
         public MainWindow()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
 
-            Restorer.LoadLastSession();
+                Player.SetVolumeLevel(1);
 
-            sliderTimer.Interval = TimeSpan.FromMilliseconds(50);
-            sliderTimer.Tick += new EventHandler(ChangeSliderPosition);
+                Restorer.LoadLastSession();
 
-            labelTimer.Interval = TimeSpan.FromMilliseconds(500);
-            labelTimer.Tick += new EventHandler(RedrawLabel);
-            labelTimer.Start();
+                sliderTimer.Interval = TimeSpan.FromMilliseconds(50);
+                sliderTimer.Tick += new EventHandler(ChangeSliderPosition);
 
-            DefaultPlaylistBox.MouseDoubleClick += DefaultPlaylist_TrackDoubleClick;
-            CustomPlaylistBox.MouseDoubleClick += CustomPlaylist_TrackDoubleClick;
+                labelTimer.Interval = TimeSpan.FromMilliseconds(500);
+                labelTimer.Tick += new EventHandler(RedrawLabel);
+                labelTimer.Start();
 
-            VolumeLevelSlider.ValueChanged += VolumeLevelSlider_Click;
-            Player.SetVolumeLevel(1);
+                DefaultPlaylistBox.MouseDoubleClick += DefaultPlaylist_TrackDoubleClick;
+                CustomPlaylistBox.MouseDoubleClick += CustomPlaylist_TrackDoubleClick;
 
-            Player.Load(PlaylistManager.GetActivePlaylist());
+                VolumeLevelSlider.ValueChanged += VolumeLevelSlider_Click;
 
-            CubesContainer.InitializeField(Pad);
-            CubesContainer.SetRandomly();
+                Player.Load(PlaylistManager.GetActivePlaylist());
+
+                CubesContainer.InitializeField(Pad);
+                CubesContainer.SetRandomly();
+            }
+            catch
+            {
+
+            }
         }
 
         private void RedrawLabel(object sender, EventArgs e)
         {
-            string result = null;
-            string hour = Player.player.Position.Hours.ToString();
-            string minute = Player.player.Position.Minutes.ToString();
-            string second = Player.player.Position.Seconds.ToString();
+            try
+            {
+                string result = null;
+                string hour = Player.player.Position.Hours.ToString();
+                string minute = Player.player.Position.Minutes.ToString();
+                string second = Player.player.Position.Seconds.ToString();
 
-            result = hour + ":" + minute + ":" + second;
+                result = hour + ":" + minute + ":" + second;
 
-            CurrentTimeLabel.Content = result;
+                CurrentTimeLabel.Content = result;
+            }
+            catch
+            {
+
+            }
         }
 
         //WINDOW CONTROL BUTTONS
@@ -67,386 +85,563 @@ namespace Phase_v2._0
         }
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            Restorer.SaveCurrentSession();
-            Close();
+            try
+            {
+                Restorer.SaveCurrentSession();
+                Close();
+            }
+            catch
+            {
+
+            }
         }
 
 
         //PLAYER BUTTONS
         private void PreviousButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Player.CurrentPlaylist.Tracklist.Count > 0)
+            try
             {
-                Player.isPlaying = true;
+                if (Player.CurrentPlaylist.Tracklist.Count > 0)
+                {
+                    Player.isPlaying = true;
 
-                Player.Previous();
+                    Player.Previous();
 
-                sliderTimer.Start();
-                TrackProgressSlider.Value = 0;
+                    sliderTimer.Start();
+                    TrackProgressSlider.Value = 0;
+                }
+            }
+            catch
+            {
+
             }
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Player.CurrentPlaylist != null)
+            try
             {
-                if (Player.CurrentPlaylist.Tracklist.Count > 0)
+                if (Player.CurrentPlaylist != null)
                 {
-                    if (Player.isPlaying == false)
+                    if (Player.CurrentPlaylist.Tracklist.Count > 0)
                     {
-                        Player.Continue();
-                    }
-                    else
-                    {
-                        Player.Pause();
+                        if (Player.isPlaying == false)
+                        {
+                            Player.Continue();
+                        }
+                        else
+                        {
+                            Player.Pause();
+                        }
                     }
                 }
+            }
+            catch
+            {
+
             }
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Player.CurrentPlaylist.Tracklist.Count > 0)
+            try
             {
-                Player.isPlaying = true;
+                if (Player.CurrentPlaylist.Tracklist.Count > 0)
+                {
+                    Player.isPlaying = true;
 
-                Player.Next();
+                    Player.Next();
 
-                sliderTimer.Start();
-                TrackProgressSlider.Value = 0;
+                    sliderTimer.Start();
+                    TrackProgressSlider.Value = 0;
+                }
+            }
+            catch
+            {
+
             }
         }
 
         private void LoopButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Player.isLooped == false)
+            try
             {
-                Player.LoopOn();
-                LoopButton.Background = Brushes.White;
+                if (Player.isLooped == false)
+                {
+                    Player.LoopOn();
+                    LoopButton.Background = Brushes.White;
+                }
+                else
+                {
+                    Player.LoopOff();
+                    LoopButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
+                }
             }
-            else
+            catch
             {
-                Player.LoopOff();
-                LoopButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
+
             }
         }
 
         private void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Player.isShuffled == false)
+            try
             {
-                Player.ShuffleOn();
-                ShuffleButton.Background = Brushes.White;
+                if (Player.isShuffled == false)
+                {
+                    Player.ShuffleOn();
+                    ShuffleButton.Background = Brushes.White;
+                }
+                else
+                {
+                    Player.ShuffleOff();
+                    ShuffleButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
+                }
             }
-            else
+            catch
             {
-                Player.ShuffleOff();
-                ShuffleButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
+
             }
         }
 
         //VISUALIZATION
         private void VisualizationButton_Click(object sender, RoutedEventArgs e)
         {
-            if (isVisualizationMenuOpened == false)
+            try
             {
-                (sender as Button).ContextMenu.IsEnabled = true;
-                (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
-                (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-                (sender as Button).ContextMenu.IsOpen = true;
-                isVisualizationMenuOpened = true;
+                if (isVisualizationMenuOpened == false)
+                {
+                    (sender as Button).ContextMenu.IsEnabled = true;
+                    (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
+                    (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                    (sender as Button).ContextMenu.IsOpen = true;
+                    isVisualizationMenuOpened = true;
+                }
+                else
+                {
+                    (sender as Button).ContextMenu.IsOpen = false;
+                    isVisualizationMenuOpened = false;
+                }
             }
-            else
+            catch
             {
-                (sender as Button).ContextMenu.IsOpen = false;
-                isVisualizationMenuOpened = false;
+
             }
         }
 
         //TOP MENU
         private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
-            if (isTopMenuOpened == false)
+            try
             {
-                (sender as Button).ContextMenu.IsEnabled = true;
-                (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
-                (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-                (sender as Button).ContextMenu.IsOpen = true;
-                isTopMenuOpened = true;
+                if (isTopMenuOpened == false)
+                {
+                    (sender as Button).ContextMenu.IsEnabled = true;
+                    (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
+                    (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                    (sender as Button).ContextMenu.IsOpen = true;
+                    isTopMenuOpened = true;
+                }
+                else
+                {
+                    (sender as Button).ContextMenu.IsOpen = false;
+                    isTopMenuOpened = false;
+                }
             }
-            else
+            catch
             {
-                (sender as Button).ContextMenu.IsOpen = false;
-                isTopMenuOpened = false;
+
             }
         }
 
         private void OpenTrack_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Multiselect = true;
-            openFileDialog.Filter = "MP3 files (*.mp3)|*.mp3|WAV files (*.wav)|*.wav";
-            openFileDialog.InitialDirectory = @"d:\";
-
-            //To custom playlist
-            PlaylistManager.activePlaylist = false;
-            //Firstly clear playlist
-            PlaylistManager.ClearActivePlaylist();
-
-            //Firstly focus the custom tab
-            CustomPlaylistTab.Focus();
-
-            //Then add files
-            if (openFileDialog.ShowDialog() == true)
+            try
             {
-                string[] files = openFileDialog.FileNames;
-                PlaylistManager.AddTracks(files);
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Multiselect = true;
+                openFileDialog.Title = "Open file";
+                openFileDialog.Filter = "MP3 files (*.mp3)|*.mp3|WAV files (*.wav)|*.wav";
+                openFileDialog.InitialDirectory = @"d:\";
+
+                //To custom playlist
+                PlaylistManager.activePlaylist = false;
+                //Firstly clear playlist
+                PlaylistManager.ClearActivePlaylist();
+
+                //Firstly focus the custom tab
+                CustomPlaylistTab.Focus();
+
+                //Then add files
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    string[] files = openFileDialog.FileNames;
+                    PlaylistManager.AddTracks(files);
+                }
+
+                Player.Load(PlaylistManager.GetActivePlaylist());
+
+                PlaylistManager.activePlaylist = false;
+                selectedTab = false;
+
+                //Close menu
+                if ((sender as Button) != null)
+                {
+                    (sender as Button).ContextMenu.IsOpen = false;
+                }
+                isTopMenuOpened = false;
             }
-
-            Player.Load(PlaylistManager.GetActivePlaylist());
-
-            PlaylistManager.activePlaylist = false;
-            selectedTab = false;
-
-            //Close menu
-            if ((sender as Button) != null)
+            catch
             {
-                (sender as Button).ContextMenu.IsOpen = false;
+
             }
-            isTopMenuOpened = false;
         }
 
         private void OpenPlaylist_Click(object sender, RoutedEventArgs e)
         {
-            PlaylistManager.OpenPlaylistDialog();
-
-            //Close menu
-            if ((sender as Button) != null)
+            try
             {
-                (sender as Button).ContextMenu.IsOpen = false;
+                PlaylistManager.OpenPlaylistDialog();
+
+                //Close menu
+                if ((sender as Button) != null)
+                {
+                    (sender as Button).ContextMenu.IsOpen = false;
+                }
+                isTopMenuOpened = false;
             }
-            isTopMenuOpened = false;
+            catch
+            {
+
+            }
         }
 
         private void SavePlaylistAs_Click(object sender, RoutedEventArgs e)
         {
-            PlaylistManager.SaveSelectedPlaylist(selectedTab);
+            try
+            {
+                PlaylistManager.SaveSelectedPlaylist(selectedTab);
+            }
+            catch
+            {
+
+            }
         }
 
         //PLAYLIST SECTION
         private void DefaultPlaylistTab_GotFocus(object sender, RoutedEventArgs e)
         {
-            selectedTab = true;
-
-            if (Player.CurrentPlaylist != null)
+            try
             {
-                if (Player.CurrentPlaylist.Tracklist.Count > 0)
-                {
+                selectedTab = true;
 
-                    int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack);
-                    if (index >= 0)
+                if (Player.CurrentPlaylist != null)
+                {
+                    if (Player.CurrentPlaylist.Tracklist.Count > 0)
                     {
-                        PlaylistManager.DrawSelection(index, selectedTab);
+
+                        int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack);
+                        if (index >= 0)
+                        {
+                            PlaylistManager.DrawSelection(index, selectedTab);
+                        }
                     }
                 }
+            }
+            catch
+            {
+
             }
         }
 
         private void CustomPlaylistTab_GotFocus(object sender, RoutedEventArgs e)
         {
-            selectedTab = false;
-
-            if (Player.CurrentPlaylist != null)
+            try
             {
-                if (Player.CurrentPlaylist.Tracklist.Count > 0)
+                selectedTab = false;
+
+                if (Player.CurrentPlaylist != null)
                 {
-                    int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack);
-                    if (index >= 0)
+                    if (Player.CurrentPlaylist.Tracklist.Count > 0)
                     {
-                        PlaylistManager.DrawSelection(index, selectedTab);
+                        int index = PlaylistManager.GetActivePlaylist().Tracklist.IndexOf(Player.CurrentTrack);
+                        if (index >= 0)
+                        {
+                            PlaylistManager.DrawSelection(index, selectedTab);
+                        }
                     }
                 }
+            }
+            catch
+            {
+
             }
         }
 
         private void DefaultPlaylist_TrackDoubleClick(Object sender, MouseButtonEventArgs e)
         {
-            selectedTab = true;
-            PlaylistManager.activePlaylist = true;
-
-            Player.Load(PlaylistManager.defaultPlaylist);
-
-            DependencyObject obj = (DependencyObject)e.OriginalSource;
-
-            if (Player.CurrentPlaylist != null)
+            try
             {
-                while (obj != null && obj != DefaultPlaylistBox)
+                selectedTab = true;
+                PlaylistManager.activePlaylist = true;
+
+                Player.Load(PlaylistManager.defaultPlaylist);
+
+                DependencyObject obj = (DependencyObject)e.OriginalSource;
+
+                if (Player.CurrentPlaylist != null)
                 {
-                    if (obj.GetType() == typeof(ListBoxItem))
+                    while (obj != null && obj != DefaultPlaylistBox)
                     {
-                        Player.isPlaying = true;
+                        if (obj.GetType() == typeof(ListBoxItem))
+                        {
+                            Player.isPlaying = true;
 
-                        PreviousTrackLabel.Text = Player.PreviousTrack.TrackTitle;
-                        CurrentTrackLabel.Text = Player.CurrentTrack.TrackTitle;
-                        NextTrackLabel.Text = Player.NextTrack.TrackTitle;
+                            PreviousTrackLabel.Text = Player.PreviousTrack.TrackTitle;
+                            CurrentTrackLabel.Text = Player.CurrentTrack.TrackTitle;
+                            NextTrackLabel.Text = Player.NextTrack.TrackTitle;
 
-                        PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
+                            PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
-                        Player.PlayTrack(Player.CurrentPlaylist[DefaultPlaylistBox.Items.IndexOf(DefaultPlaylistBox.SelectedItem)]);
+                            Player.PlayTrack(Player.CurrentPlaylist[DefaultPlaylistBox.Items.IndexOf(DefaultPlaylistBox.SelectedItem)]);
 
-                        break;
+                            break;
+                        }
+                        obj = VisualTreeHelper.GetParent(obj);
                     }
-                    obj = VisualTreeHelper.GetParent(obj);
                 }
-            }
 
-            sliderTimer.Start();
-            TrackProgressSlider.Value = 0;
+                sliderTimer.Start();
+                TrackProgressSlider.Value = 0;
+            }
+            catch
+            {
+
+            }
         }
 
         private void CustomPlaylist_TrackDoubleClick(Object sender, MouseButtonEventArgs e)
         {
-            selectedTab = false;
-            PlaylistManager.activePlaylist = false;
-
-            Player.Load(PlaylistManager.customPlaylist);
-
-            DependencyObject obj = (DependencyObject)e.OriginalSource;
-
-            if (Player.CurrentPlaylist != null)
+            try
             {
-                while (obj != null && obj != CustomPlaylistBox)
+                selectedTab = false;
+                PlaylistManager.activePlaylist = false;
+
+                Player.Load(PlaylistManager.customPlaylist);
+
+                DependencyObject obj = (DependencyObject)e.OriginalSource;
+
+                if (Player.CurrentPlaylist != null)
                 {
-                    if (obj.GetType() == typeof(ListBoxItem))
+                    while (obj != null && obj != CustomPlaylistBox)
                     {
-                        Player.isPlaying = true;
+                        if (obj.GetType() == typeof(ListBoxItem))
+                        {
+                            Player.isPlaying = true;
 
-                        PreviousTrackLabel.Text = Player.PreviousTrack.TrackTitle;
-                        CurrentTrackLabel.Text = Player.CurrentTrack.TrackTitle;
-                        NextTrackLabel.Text = Player.NextTrack.TrackTitle;
+                            PreviousTrackLabel.Text = Player.PreviousTrack.TrackTitle;
+                            CurrentTrackLabel.Text = Player.CurrentTrack.TrackTitle;
+                            NextTrackLabel.Text = Player.NextTrack.TrackTitle;
 
-                        PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
+                            PlayIcon.Source = new BitmapImage(new Uri(@"D:/Work/C#/Курсовой проект/Icons/pause.png", UriKind.RelativeOrAbsolute));
 
-                        Player.PlayTrack(Player.CurrentPlaylist[CustomPlaylistBox.Items.IndexOf(CustomPlaylistBox.SelectedItem)]);
+                            Player.PlayTrack(Player.CurrentPlaylist[CustomPlaylistBox.Items.IndexOf(CustomPlaylistBox.SelectedItem)]);
 
-                        break;
+                            break;
+                        }
+                        obj = VisualTreeHelper.GetParent(obj);
                     }
-                    obj = VisualTreeHelper.GetParent(obj);
                 }
-            }
 
-            sliderTimer.Start();
-            TrackProgressSlider.Value = 0;
+                sliderTimer.Start();
+                TrackProgressSlider.Value = 0;
+            }
+            catch
+            {
+
+            }
         }
 
         private void DefaultPlaylistDrop(object sender, DragEventArgs e)
         {
-            PlaylistManager.activePlaylist = true;
-
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            try
             {
-                string[] chosenFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
-                
-                PlaylistManager.AddTracks(chosenFiles);
-            }
+                PlaylistManager.activePlaylist = true;
 
-            Player.Load(PlaylistManager.GetActivePlaylist());
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                {
+                    string[] chosenFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                    PlaylistManager.AddTracks(chosenFiles);
+                }
+
+                Player.Load(PlaylistManager.GetActivePlaylist());
+            }
+            catch
+            {
+
+            }
         }
 
         private void CustomPlaylistDrop(object sender, DragEventArgs e)
         {
-            PlaylistManager.activePlaylist = false;
-
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            try
             {
-                string[] chosenFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+                PlaylistManager.activePlaylist = false;
 
-                PlaylistManager.AddTracks(chosenFiles);
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                {
+                    string[] chosenFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                    PlaylistManager.AddTracks(chosenFiles);
+                }
+
+                Player.Load(PlaylistManager.GetActivePlaylist());
             }
+            catch
+            {
 
-            Player.Load(PlaylistManager.GetActivePlaylist());
+            }
         }
 
 
         //BOTTOM BUTTONS
         private void AddTrackButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Multiselect = true;
-            openFileDialog.Filter = "MP3 files (*.mp3)|*.mp3|WAV files (*.wav)|*.wav";
-            openFileDialog.InitialDirectory = @"d:\";
-
-            if (openFileDialog.ShowDialog() == true)
+            try
             {
-                string[] files = openFileDialog.FileNames;
-                PlaylistManager.AddTracks(files);
-            }
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Multiselect = true;
+                openFileDialog.Title = "Open file";
+                openFileDialog.Filter = "MP3 files (*.mp3)|*.mp3|WAV files (*.wav)|*.wav";
+                openFileDialog.InitialDirectory = @"d:\";
 
-            Player.Load(PlaylistManager.GetActivePlaylist());
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    string[] files = openFileDialog.FileNames;
+                    PlaylistManager.AddTracks(files);
+                }
+
+                Player.Load(PlaylistManager.GetActivePlaylist());
+            }
+            catch
+            {
+
+            }
         }
 
         private void RemoveTrackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedTab == true)
+            try
             {
-                if (DefaultPlaylistBox.SelectedItem != null)
+                if (selectedTab == true)
                 {
-                    Track selectedTrack = PlaylistManager.defaultPlaylist.Tracklist[DefaultPlaylistBox.Items.IndexOf(DefaultPlaylistBox.SelectedItem)];
-                    PlaylistManager.RemoveTrack(selectedTab, selectedTrack);
+                    if (DefaultPlaylistBox.SelectedItem != null)
+                    {
+                        Track selectedTrack = PlaylistManager.defaultPlaylist.Tracklist[DefaultPlaylistBox.Items.IndexOf(DefaultPlaylistBox.SelectedItem)];
+                        PlaylistManager.RemoveTrack(selectedTab, selectedTrack);
+                    }
+                }
+                else
+                {
+                    if (CustomPlaylistBox.SelectedItem != null)
+                    {
+                        Track selectedTrack = PlaylistManager.customPlaylist.Tracklist[CustomPlaylistBox.Items.IndexOf(CustomPlaylistBox.SelectedItem)];
+                        PlaylistManager.RemoveTrack(selectedTab, selectedTrack);
+                    }
                 }
             }
-            else
+            catch
             {
-                if (CustomPlaylistBox.SelectedItem != null)
-                {
-                    Track selectedTrack = PlaylistManager.customPlaylist.Tracklist[CustomPlaylistBox.Items.IndexOf(CustomPlaylistBox.SelectedItem)];
-                    PlaylistManager.RemoveTrack(selectedTab, selectedTrack);
-                }
+
             }
         }
 
         private void ClearCurrentPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
-            PlaylistManager.Clear(selectedTab);
+            try
+            {
+                PlaylistManager.Clear(selectedTab);
+            }
+            catch
+            {
+
+            }
         }
 
         private void SaveCurrentPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
-            PlaylistManager.SaveSelectedPlaylist(selectedTab);
+            try
+            { 
+                PlaylistManager.SaveSelectedPlaylist(selectedTab);
+            }
+            catch
+            {
+
+            }
         }
 
         private void LoadPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
-            PlaylistManager.OpenPlaylistDialog();
+            try
+            { 
+                PlaylistManager.OpenPlaylistDialog();
+            }
+            catch
+            {
+
+            }
         }
 
 
         //POSITION SLIDER
         private void ChangeSliderPosition(object sender, EventArgs e)
         {
-            if (!isDraggingPosition && !isClickedPosition)
+            try
             {
-                if (Player.player.NaturalDuration.HasTimeSpan == true)
+                if (!isDraggingPosition && !isClickedPosition)
                 {
-                    TrackProgressSlider.Value = Player.player.Position.TotalMilliseconds * 1000 / Player.player.NaturalDuration.TimeSpan.TotalMilliseconds;
+                    if (Player.player.NaturalDuration.HasTimeSpan == true)
+                    {
+                        TrackProgressSlider.Value = Player.player.Position.TotalMilliseconds * 1000 / Player.player.NaturalDuration.TimeSpan.TotalMilliseconds;
+                    }
                 }
+            }
+            catch
+            {
+
             }
         }
 
         private void TrackProgressSlider_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
-            isDraggingPosition = true;
-            Visualizer.PauseCurrentVisualization();
+            try
+            { 
+                isDraggingPosition = true;
+                Visualizer.PauseCurrentVisualization();
+            }
+            catch
+            {
+
+            }
         }
 
         private void TrackProgressSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            isDraggingPosition = false;
-
-            if (Player.CurrentPlaylist.Tracklist.Count > 0)
+            try
             {
-                Player.pauseTime = Player.totalTime * TrackProgressSlider.Value / 1000;
-                Player.StartPlaying();
+                isDraggingPosition = false;
+
+                if (Player.CurrentPlaylist.Tracklist.Count > 0)
+                {
+                    Player.pauseTime = Player.totalTime * TrackProgressSlider.Value / 1000;
+                    Player.StartPlaying();
+                }
+            }
+            catch
+            {
+
             }
         }
 
@@ -454,15 +649,22 @@ namespace Phase_v2._0
         //VOLUME
         private void MuteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Player.isMuted == false)
+            try
             {
-                Player.MuteOn();
-                MuteButton.Background = Brushes.White;
+                if (Player.isMuted == false)
+                {
+                    Player.MuteOn();
+                    MuteButton.Background = Brushes.White;
+                }
+                else
+                {
+                    Player.MuteOff();
+                    MuteButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
+                }
             }
-            else
+            catch
             {
-                Player.MuteOff();
-                MuteButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
+
             }
         }
 
@@ -470,16 +672,128 @@ namespace Phase_v2._0
         //VOLUME SLIDER
         private void VolumeLevelSlider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            Player.MuteOff();
-            MuteButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
-            Player.SetVolumeLevel(VolumeLevelSlider.Value / 100);
+            try
+            {
+                Player.MuteOff();
+                MuteButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
+                Player.SetVolumeLevel(VolumeLevelSlider.Value / 100);
+            }
+            catch
+            {
+
+            }
         }
 
         private void VolumeLevelSlider_Click(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            Player.MuteOff();
-            MuteButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
-            Player.SetVolumeLevel(VolumeLevelSlider.Value / 100);
+            try
+            {
+                Player.MuteOff();
+                MuteButton.Background = new SolidColorBrush(Color.FromArgb(153, 255, 255, 255));
+                Player.SetVolumeLevel(VolumeLevelSlider.Value / 100);
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void ModeNone_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Visualizer.StopVisualizaton();
+                mode = 0;
+                Visualizer.ChoseVisualizationMode(mode);
+
+                isVisualizationMenuOpened = false;
+                (sender as Button).ContextMenu.IsOpen = false;
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error);
+            }
+        }
+
+        private void ModeHorizontal_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Visualizer.StopVisualizaton();
+                mode = 1;
+                Visualizer.ChoseVisualizationMode(mode);
+
+                isVisualizationMenuOpened = false;
+                (sender as Button).ContextMenu.IsOpen = false;
+
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void ModeVertical_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Visualizer.StopVisualizaton();
+                mode = 2;
+                Visualizer.ChoseVisualizationMode(mode);
+
+                isVisualizationMenuOpened = false;
+                (sender as Button).ContextMenu.IsOpen = false;
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void ModeMesh_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Visualizer.StopVisualizaton();
+                mode = 3;
+                Visualizer.ChoseVisualizationMode(mode);
+
+                isVisualizationMenuOpened = false;
+                (sender as Button).ContextMenu.IsOpen = false;
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void ModeWave_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Visualizer.StopVisualizaton();
+                mode = 4;
+                Visualizer.ChoseVisualizationMode(mode);
+
+                isVisualizationMenuOpened = false;
+                (sender as Button).ContextMenu.IsOpen = false;
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void ShowAboutMessageBox(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                MessageBox.Show("PHAZE 2.1 RELEASE;\nCourse work by George Puisha;\nFebruary-June 2017.", "Credits");
+            }
+            catch
+            {
+
+            }
         }
     }
 }
